@@ -140,21 +140,37 @@
   ]
 
   let currentUser = null
+  let currentProfile = null
   let currentCommunity = 'klonoa'
   let authMode = 'signin'
+  let profileCache = {}
 
   async function init() {
     const { data: { session } } = await db.auth.getSession()
     currentUser = session?.user ?? null
+    if (currentUser) await loadCurrentProfile()
     updateNav()
     renderApp()
+  }
+
+  async function loadCurrentProfile() {
+    const { data } = await db.from('profiles').select('username').eq('id', currentUser.id).single()
+    currentProfile = data
+  }
+
+  async function getUsername(userId) {
+    if (profileCache[userId]) return profileCache[userId]
+    const { data } = await db.from('profiles').select('username').eq('id', userId).single()
+    const name = data?.username || userId.slice(0, 8)
+    profileCache[userId] = name
+    return name
   }
 
   function updateNav() {
     const btn = document.getElementById('nav-auth-btn')
     const userEl = document.getElementById('nav-username')
     if (currentUser) {
-      userEl.textContent = currentUser.email?.split('@')[0] ?? 'User'
+      userEl.textContent = currentProfile?.username || currentUser.email?.split('@')[0] || 'User'
       btn.textContent = 'Sign out'
       btn.className = 'btn btn-outline'
     } else {
@@ -166,13 +182,17 @@
 
   function handleAuthBtn() {
     if (currentUser) {
-      db.auth.signOut().then(() => { currentUser = null; updateNav(); renderApp() })
+      db.auth.signOut().then(() => { currentUser = null; currentProfile = null; profileCache = {}; updateNav(); renderApp() })
     } else {
       renderAuth()
     }
   }
 
   function renderApp() {
+    if (currentUser && !currentProfile?.username) {
+      renderUsernameSetup()
+      return
+    }
     const community = COMMUNITIES.find(c => c.id === currentCommunity)
     document.getElementById('app').innerHTML = `
       <div class="layout">
@@ -192,9 +212,9 @@
           <div class="card">
             <div class="card-title">Your profile</div>
             <div class="profile-card">
-              <div class="avatar" style="width:38px;height:38px;">${(currentUser.email?.[0] ?? '?').toUpperCase()}</div>
+              <div class="avatar" style="width:38px;height:38px;">${(currentProfile?.username?.[0] ?? currentUser.email?.[0] ?? '?').toUpperCase()}</div>
               <div>
-                <div style="font-size:13px;font-weight:700;">${currentUser.email?.split('@')[0]}</div>
+                <div style="font-size:13px;font-weight:700;">${currentProfile?.username ?? currentUser.email?.split('@')[0]}</div>
                 <div style="font-size:11px;color:var(--text2);">Member</div>
               </div>
             </div>
@@ -210,7 +230,7 @@
           ${currentUser ? `
           <div class="new-post card">
             <div class="new-post-row">
-              <div class="avatar" style="width:36px;height:36px;margin-top:2px;">${(currentUser.email?.[0] ?? '?').toUpperCase()}</div>
+              <div class="avatar" style="width:36px;height:36px;margin-top:2px;">${(currentProfile?.username?.[0] ?? currentUser.email?.[0] ?? '?').toUpperCase()}</div>
               <textarea id="post-input" rows="3" placeholder="Write a post in ${community.name}..."></textarea>
             </div>
             <div class="new-post-actions">
@@ -257,8 +277,12 @@
     const countMap = {}
     yeahCounts?.forEach(y => { countMap[y.post_id] = (countMap[y.post_id] || 0) + 1 })
 
+    const userIds = [...new Set(data.map(p => p.user_id).filter(Boolean))]
+    const { data: profiles } = await db.from('profiles').select('id, username').in('id', userIds)
+    profiles?.forEach(p => { if (p.username) profileCache[p.id] = p.username })
+
     container.innerHTML = data.map(post => {
-      const username = post.user_id?.slice(0, 8) ?? 'Anonymous'
+      const username = profileCache[post.user_id] || post.user_id?.slice(0, 8) || 'Anonymous'
       const initial = username[0].toUpperCase()
       const date = new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
       const yeah = yeahMap[post.id]
@@ -312,7 +336,38 @@
     renderApp()
   }
 
-  function renderAuth() {
+  function renderUsernameSetup() {
+    document.getElementById('app').innerHTML = `
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-title">🌀 KlonoaVerse</div>
+          <div class="auth-sub">Choose your username!</div>
+          <div id="auth-msg"></div>
+          <div class="field"><label>Username</label><input type="text" id="username-input" placeholder="e.g. WindDreamer" maxlength="20" /></div>
+          <button class="btn btn-accent btn-full" onclick="saveUsername()">Let's go!</button>
+        </div>
+      </div>
+    `
+  }
+
+  async function saveUsername() {
+    const input = document.getElementById('username-input')
+    const msg = document.getElementById('auth-msg')
+    const username = input?.value.trim()
+    if (!username) return
+    if (username.length < 3) {
+      if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`
+      return
+    }
+    const { error } = await db.from('profiles').upsert({ id: currentUser.id, username })
+    if (error) {
+      if (msg) msg.innerHTML = `<div class="msg msg-error">That username may already be taken, try another!</div>`
+    } else {
+      currentProfile = { username }
+      updateNav()
+      renderApp()
+    }
+  }
     document.getElementById('app').innerHTML = `
       <div class="auth-wrap">
         <div class="auth-card">
@@ -362,6 +417,7 @@
         if (msg) msg.innerHTML = `<div class="msg msg-success">Check your email to confirm your account!</div>`
       } else {
         currentUser = result.data.user
+        await loadCurrentProfile()
         updateNav()
         renderApp()
       }
