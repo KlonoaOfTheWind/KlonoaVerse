@@ -13,6 +13,8 @@
       --accent: #2d7d5e; --accent2: #5ba68a; --accent-light: #d4f0e6;
       --text: #1a3a2e; --text2: #4a7a66;
       --yeah: #e05a8a; --yeah-light: #fce8f0;
+      --red: #c0392b; --red-light: #fce8e8;
+      --amber: #d4900a; --amber-light: #fef3d4;
       --radius: 12px; --radius-sm: 8px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,6 +30,9 @@
     .btn-accent { background: var(--accent); color: #fff; }
     .btn-yeah { background: var(--yeah-light); color: var(--yeah); border: 1.5px solid #f0b8cf; font-size: 12px; padding: 4px 10px; }
     .btn-yeah.active { background: var(--yeah); color: #fff; border-color: var(--yeah); }
+    .btn-red { background: var(--red-light); color: var(--red); border: 1.5px solid #f0b8b8; font-size: 12px; padding: 4px 10px; }
+    .btn-amber { background: var(--amber-light); color: var(--amber); border: 1.5px solid #f0d8a0; font-size: 12px; padding: 4px 10px; }
+    .btn-green { background: var(--accent-light); color: var(--accent); border: 1.5px solid #a0d8c0; font-size: 12px; padding: 4px 10px; }
     .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.25rem; max-width: 960px; margin: 1.25rem auto; padding: 0 1rem; }
     @media (max-width: 640px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
     .sidebar { display: flex; flex-direction: column; gap: 12px; }
@@ -56,7 +61,7 @@
     .post-user:hover { text-decoration: underline; }
     .post-meta { font-size: 11px; color: var(--text2); }
     .post-body { font-size: 14px; color: var(--text); line-height: 1.65; margin-bottom: 12px; }
-    .post-footer { display: flex; align-items: center; gap: 12px; }
+    .post-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .auth-wrap { max-width: 400px; margin: 3rem auto; padding: 0 1rem; }
     .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
     .auth-title { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--accent); text-align: center; margin-bottom: 4px; }
@@ -64,6 +69,7 @@
     .field { margin-bottom: 12px; }
     .field label { font-size: 12px; font-weight: 700; color: var(--text2); display: block; margin-bottom: 4px; }
     input[type=text], input[type=email], input[type=password] { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; width: 100%; outline: none; transition: border 0.15s; }
+    select { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; width: 100%; outline: none; }
     input:focus { border-color: var(--accent2); }
     .btn-full { width: 100%; padding: 10px; font-size: 15px; border-radius: var(--radius-sm); margin-top: 4px; }
     .auth-switch { font-size: 13px; color: var(--text2); text-align: center; margin-top: 1rem; }
@@ -74,6 +80,10 @@
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 14px; }
     .empty-icon { font-size: 40px; margin-bottom: 8px; }
     .loading { text-align: center; padding: 2rem; color: var(--text2); font-size: 14px; }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; display: inline-block; }
+    .badge-admin { background: #fff3cd; color: #856404; }
+    .badge-banned { background: var(--red-light); color: var(--red); }
+    .badge-warned { background: var(--amber-light); color: var(--amber); }
 
     /* PROFILE PAGE */
     .profile-page { max-width: 680px; margin: 0 auto; padding: 0 1rem 2rem; }
@@ -82,10 +92,9 @@
     .profile-banner-edit { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 20px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
     .profile-info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); padding: 0 1.25rem 1.25rem; margin-bottom: 1rem; }
     .profile-avatar-wrap { position: relative; display: inline-block; margin-top: -36px; margin-bottom: 8px; }
-    .profile-avatar-edit { position: absolute; bottom: 0; right: 0; background: var(--accent); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .profile-username { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--text); }
+    .profile-username { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--text); display: flex; align-items: center; gap: 8px; }
     .profile-bio { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
-    .profile-actions { margin-top: 12px; display: flex; gap: 8px; }
+    .profile-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
 
     /* EDIT PROFILE */
     .edit-wrap { max-width: 500px; margin: 2rem auto; padding: 0 1rem; }
@@ -93,6 +102,22 @@
     .upload-area:hover { border-color: var(--accent2); }
     .upload-area img { max-height: 120px; max-width: 100%; border-radius: var(--radius-sm); margin-bottom: 8px; }
     .upload-label { font-size: 12px; color: var(--text2); }
+
+    /* MAINTENANCE */
+    .maintenance { text-align: center; padding: 4rem 1rem; }
+    .maintenance-icon { font-size: 60px; margin-bottom: 1rem; }
+    .maintenance h1 { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--accent); margin-bottom: 8px; }
+    .maintenance p { font-size: 14px; color: var(--text2); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; max-width: 400px; width: 100%; }
+    .modal h3 { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--text); margin-bottom: 1rem; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 1rem; }
+
+    /* ADMIN PANEL */
+    .admin-bar { background: #fff3cd; border: 1px solid #f0d060; border-radius: var(--radius); padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+    .admin-bar-title { font-size: 13px; font-weight: 700; color: #856404; }
   </style>
 </head>
 <body>
@@ -104,6 +129,8 @@
   </div>
 </nav>
 <div id="app"></div>
+<div id="modal-container"></div>
+
 <script>
   const SUPABASE_URL = 'https://jvxhqzmybeeeanflazuo.supabase.co'
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2eGhxem15YmVlZWFuZmxhenVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTYxMjIsImV4cCI6MjA5NDk3MjEyMn0.swj3-6nFWPlXjqttBWPEBssv-1TFmJ71xLLnaRlIzSI'
@@ -124,11 +151,18 @@
   let currentCommunity = 'klonoa'
   let authMode = 'signin'
   let profileCache = {}
+  let maintenanceMode = false
+
+  const isAdmin = () => currentProfile?.role === 'admin'
 
   async function init() {
     const { data: { session } } = await db.auth.getSession()
     currentUser = session?.user ?? null
     if (currentUser) await loadCurrentProfile()
+    // Check maintenance mode
+    const { data } = await db.from('profiles').select('role').eq('role', 'admin').limit(1)
+    const mm = localStorage.getItem('kv_maintenance') === 'true'
+    maintenanceMode = mm
     updateNav()
     renderApp()
   }
@@ -138,16 +172,19 @@
     currentProfile = data
   }
 
-  function getAvatarUrl(profile) {
-    if (profile?.avatar_url) return `<img src="${profile.avatar_url}" alt="avatar" />`
-    return (profile?.username?.[0] ?? '?').toUpperCase()
+  function getAvatarHtml(profile, size = 36) {
+    if (profile?.avatar_url) {
+      return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${profile.avatar_url}" alt="avatar" /></div>`
+    }
+    return `<div class="avatar" style="width:${size}px;height:${size}px;font-size:${Math.floor(size*0.35)}px;">${(profile?.username?.[0] ?? '?').toUpperCase()}</div>`
   }
 
   function updateNav() {
     const btn = document.getElementById('nav-auth-btn')
     const userEl = document.getElementById('nav-username')
     if (currentUser) {
-      userEl.textContent = currentProfile?.username || currentUser.email?.split('@')[0] || 'User'
+      const adminBadge = isAdmin() ? ' 👑' : ''
+      userEl.textContent = (currentProfile?.username || currentUser.email?.split('@')[0] || 'User') + adminBadge
       btn.textContent = 'Sign out'
       btn.className = 'btn btn-outline'
     } else {
@@ -170,6 +207,19 @@
 
   function renderApp() {
     if (currentUser && !currentProfile?.username) { renderUsernameSetup(); return }
+
+    // Show maintenance page to non-admins
+    if (maintenanceMode && !isAdmin()) {
+      document.getElementById('app').innerHTML = `
+        <div class="maintenance">
+          <div class="maintenance-icon">🔧</div>
+          <h1>KlonoaVerse is under maintenance</h1>
+          <p>We'll be back soon! Check back later.</p>
+        </div>
+      `
+      return
+    }
+
     const community = COMMUNITIES.find(c => c.id === currentCommunity)
     document.getElementById('app').innerHTML = `
       <div class="layout">
@@ -187,15 +237,20 @@
           <div class="card">
             <div class="card-title">Your profile</div>
             <div class="profile-card" onclick="showOwnProfile()">
-              <div class="avatar" style="width:38px;height:38px;">${getAvatarUrl(currentProfile)}</div>
+              ${getAvatarHtml(currentProfile, 38)}
               <div>
-                <div style="font-size:13px;font-weight:700;">${currentProfile?.username ?? currentUser.email?.split('@')[0]}</div>
+                <div style="font-size:13px;font-weight:700;">${currentProfile?.username ?? currentUser.email?.split('@')[0]}${isAdmin() ? ' 👑' : ''}</div>
                 <div style="font-size:11px;color:var(--text2);">View profile</div>
               </div>
             </div>
           </div>` : ''}
         </aside>
         <main class="main">
+          ${isAdmin() ? `
+          <div class="admin-bar">
+            <span class="admin-bar-title">👑 Admin panel</span>
+            <button class="btn btn-amber" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Turn site ON' : '🔴 Turn site OFF'}</button>
+          </div>` : ''}
           <div class="community-header">
             <h2>${community.icon} ${community.name} community</h2>
             <p>${community.desc}</p>
@@ -203,7 +258,7 @@
           ${currentUser ? `
           <div class="new-post card">
             <div class="new-post-row">
-              <div class="avatar" style="width:36px;height:36px;margin-top:2px;">${getAvatarUrl(currentProfile)}</div>
+              ${getAvatarHtml(currentProfile, 36)}
               <textarea id="post-input" rows="3" placeholder="Write a post in ${community.name}..."></textarea>
             </div>
             <div class="new-post-actions"><button class="btn btn-accent" onclick="submitPost()">Post</button></div>
@@ -219,6 +274,12 @@
       </div>
     `
     loadPosts()
+  }
+
+  function toggleMaintenance() {
+    maintenanceMode = !maintenanceMode
+    localStorage.setItem('kv_maintenance', maintenanceMode)
+    renderApp()
   }
 
   async function loadPosts(containerId = 'posts-list', filterUserId = null) {
@@ -249,7 +310,7 @@
     yeahCounts?.forEach(y => { countMap[y.post_id] = (countMap[y.post_id] || 0) + 1 })
 
     const userIds = [...new Set(data.map(p => p.user_id).filter(Boolean))]
-    const { data: profiles } = await db.from('profiles').select('id, username, avatar_url').in('id', userIds)
+    const { data: profiles } = await db.from('profiles').select('id, username, avatar_url, role').in('id', userIds)
     profiles?.forEach(p => { profileCache[p.id] = p })
 
     container.innerHTML = data.map(post => {
@@ -261,12 +322,16 @@
       const date = new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
       const yeah = yeahMap[post.id]
       const count = countMap[post.id] || 0
+      const adminBadge = profile.role === 'admin' ? '<span class="badge badge-admin">👑 Admin</span>' : ''
       return `
-        <div class="post">
+        <div class="post" id="post-${post.id}">
           <div class="post-header">
             <div class="avatar" style="width:36px;height:36px;">${avatarContent}</div>
             <div>
-              <div class="post-user" onclick="renderProfile('${post.user_id}')">${username}</div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="post-user" onclick="renderProfile('${post.user_id}')">${username}</span>
+                ${adminBadge}
+              </div>
               <div class="post-meta">${date} · ${post.community}</div>
             </div>
           </div>
@@ -275,6 +340,7 @@
             <button class="btn btn-yeah ${yeah ? 'active' : ''}" onclick="toggleYeah('${post.id}', ${yeah})">
               Yeah! ${count > 0 ? count : ''}
             </button>
+            ${isAdmin() ? `<button class="btn btn-red" onclick="confirmDeletePost('${post.id}')">🗑️ Delete</button>` : ''}
           </div>
         </div>
       `
@@ -287,9 +353,17 @@
     if (!profile) { document.getElementById('app').innerHTML = `<div class="empty" style="margin-top:3rem;"><div class="empty-icon">😕</div>Profile not found</div>`; return }
 
     const isOwn = currentUser?.id === userId
+    const isBanned = profile.banned && (!profile.banned_until || new Date(profile.banned_until) > new Date())
     const avatarContent = profile.avatar_url
       ? `<img src="${profile.avatar_url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;" />`
       : (profile.username?.[0] ?? '?').toUpperCase()
+
+    const warningInfo = profile.warning_count > 0
+      ? `<span class="badge badge-warned">⚠️ ${profile.warning_count} warning${profile.warning_count > 1 ? 's' : ''}</span>`
+      : ''
+    const bannedInfo = isBanned
+      ? `<span class="badge badge-banned">🔨 Banned${profile.banned_until ? ' until ' + new Date(profile.banned_until).toLocaleDateString('en-GB') : ' permanently'}</span>`
+      : ''
 
     document.getElementById('app').innerHTML = `
       <div class="profile-page">
@@ -302,10 +376,22 @@
             <div class="profile-avatar-wrap">
               <div class="avatar" style="width:72px;height:72px;font-size:28px;border:3px solid #fff;">${avatarContent}</div>
             </div>
-            <div class="profile-username">${profile.username ?? 'Unknown'}</div>
-            ${profile.bio ? `<div class="profile-bio">${escapeHtml(profile.bio)}</div>` : `<div class="profile-bio" style="color:var(--border);">${isOwn ? 'No bio yet — edit your profile to add one!' : ''}</div>`}
+            <div class="profile-username">
+              ${profile.username ?? 'Unknown'}
+              ${profile.role === 'admin' ? '<span class="badge badge-admin">👑 Admin</span>' : ''}
+              ${warningInfo}
+              ${bannedInfo}
+            </div>
+            ${profile.bio ? `<div class="profile-bio">${escapeHtml(profile.bio)}</div>` : ''}
             <div class="profile-actions">
-              ${isOwn ? `<button class="btn btn-accent" onclick="renderEditProfile()">Edit profile</button>` : ''}
+              ${isOwn ? `<button class="btn btn-accent" onclick="renderEditProfile()">✏️ Edit profile</button>` : ''}
+              ${isAdmin() && !isOwn ? `
+                <button class="btn btn-amber" onclick="warnUser('${userId}', '${profile.username}', ${profile.warning_count})">⚠️ Warn</button>
+                ${isBanned
+                  ? `<button class="btn btn-green" onclick="unbanUser('${userId}', '${profile.username}')">✅ Unban</button>`
+                  : `<button class="btn btn-red" onclick="showBanModal('${userId}', '${profile.username}')">🔨 Ban</button>`
+                }
+              ` : ''}
               <button class="btn btn-outline" style="color:var(--text2);border-color:var(--border);" onclick="showHome()">← Back</button>
             </div>
           </div>
@@ -317,13 +403,113 @@
     loadPosts('profile-posts', userId)
   }
 
+  // ADMIN ACTIONS
+  function confirmDeletePost(postId) {
+    showModal(`
+      <h3>🗑️ Delete post?</h3>
+      <p style="font-size:14px;color:var(--text2);">This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-red btn-full" onclick="deletePost('${postId}')">Yes, delete</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function deletePost(postId) {
+    closeModal()
+    await db.from('posts').delete().eq('id', postId)
+    loadPosts()
+  }
+
+  async function warnUser(userId, username, currentWarnings) {
+    showModal(`
+      <h3>⚠️ Warn ${username}?</h3>
+      <p style="font-size:14px;color:var(--text2);">They currently have ${currentWarnings} warning(s). This will send them a warning about their behaviour.</p>
+      <div class="modal-actions">
+        <button class="btn btn-amber btn-full" onclick="sendWarning('${userId}')">Yes, warn</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function sendWarning(userId) {
+    closeModal()
+    await db.from('profiles').update({ warning_count: db.rpc ? undefined : undefined }).eq('id', userId)
+    // Increment warning count
+    const { data } = await db.from('profiles').select('warning_count').eq('id', userId).single()
+    const newCount = (data?.warning_count ?? 0) + 1
+    await db.from('profiles').update({ warning_count: newCount }).eq('id', userId)
+    renderProfile(userId)
+  }
+
+  function showBanModal(userId, username) {
+    showModal(`
+      <h3>🔨 Ban ${username}?</h3>
+      <div class="field" style="margin-top:1rem;">
+        <label>Ban duration</label>
+        <select id="ban-duration">
+          <option value="1">1 day</option>
+          <option value="3">3 days</option>
+          <option value="7">1 week</option>
+          <option value="30">1 month</option>
+          <option value="0">Permanent</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-red btn-full" onclick="banUser('${userId}')">Ban</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function banUser(userId) {
+    const days = parseInt(document.getElementById('ban-duration').value)
+    let banned_until = null
+    if (days > 0) {
+      const d = new Date()
+      d.setDate(d.getDate() + days)
+      banned_until = d.toISOString()
+    }
+    closeModal()
+    await db.from('profiles').update({ banned: true, banned_until }).eq('id', userId)
+    renderProfile(userId)
+  }
+
+  async function unbanUser(userId, username) {
+    showModal(`
+      <h3>✅ Unban ${username}?</h3>
+      <p style="font-size:14px;color:var(--text2);">This will restore their access to KlonoaVerse.</p>
+      <div class="modal-actions">
+        <button class="btn btn-green btn-full" onclick="doUnban('${userId}')">Yes, unban</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function doUnban(userId) {
+    closeModal()
+    await db.from('profiles').update({ banned: false, banned_until: null }).eq('id', userId)
+    renderProfile(userId)
+  }
+
+  function showModal(html) {
+    document.getElementById('modal-container').innerHTML = `
+      <div class="modal-overlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">${html}</div>
+      </div>
+    `
+  }
+
+  function closeModal() {
+    document.getElementById('modal-container').innerHTML = ''
+  }
+
   function renderEditProfile() {
     document.getElementById('app').innerHTML = `
       <div class="edit-wrap">
         <div class="card">
           <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--accent);margin-bottom:1.5rem;">Edit profile</div>
           <div id="edit-msg"></div>
-
           <div class="field">
             <label>Banner image</label>
             <div class="upload-area" onclick="document.getElementById('banner-input').click()">
@@ -331,10 +517,9 @@
                 ${currentProfile?.banner_url ? `<img src="${currentProfile.banner_url}" />` : ''}
                 <div class="upload-label">Click to upload banner (recommended: 1200x400px)</div>
               </div>
-              <input type="file" id="banner-input" accept="image/*" style="display:none" onchange="previewImage('banner-input','banner-preview-img','banner-preview')" />
+              <input type="file" id="banner-input" accept="image/*" style="display:none" onchange="previewImage('banner-input','banner-preview')" />
             </div>
           </div>
-
           <div class="field">
             <label>Profile picture</label>
             <div class="upload-area" onclick="document.getElementById('avatar-input').click()">
@@ -342,20 +527,17 @@
                 ${currentProfile?.avatar_url ? `<img src="${currentProfile.avatar_url}" style="border-radius:50%;width:80px;height:80px;object-fit:cover;" />` : ''}
                 <div class="upload-label">Click to upload profile picture</div>
               </div>
-              <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="previewImage('avatar-input','avatar-preview-img','avatar-preview')" />
+              <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="previewImage('avatar-input','avatar-preview')" />
             </div>
           </div>
-
           <div class="field">
             <label>Username</label>
             <input type="text" id="edit-username" value="${currentProfile?.username ?? ''}" maxlength="20" />
           </div>
-
           <div class="field">
             <label>Bio</label>
             <textarea id="edit-bio" rows="3" placeholder="Tell everyone about yourself...">${currentProfile?.bio ?? ''}</textarea>
           </div>
-
           <div style="display:flex;gap:8px;margin-top:4px;">
             <button class="btn btn-accent btn-full" onclick="saveProfile()">Save</button>
             <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="showOwnProfile()">Cancel</button>
@@ -365,7 +547,7 @@
     `
   }
 
-  function previewImage(inputId, imgId, containerId) {
+  function previewImage(inputId, containerId) {
     const file = document.getElementById(inputId)?.files[0]
     if (!file) return
     const reader = new FileReader()
@@ -399,20 +581,13 @@
       if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`
       return
     }
-
     if (msg) msg.innerHTML = `<div class="msg msg-success">Saving...</div>`
 
     let avatar_url = currentProfile?.avatar_url ?? null
     let banner_url = currentProfile?.banner_url ?? null
 
-    if (avatarFile) {
-      const url = await uploadImage('avatars', avatarFile)
-      if (url) avatar_url = url
-    }
-    if (bannerFile) {
-      const url = await uploadImage('banners', bannerFile)
-      if (url) banner_url = url
-    }
+    if (avatarFile) { const url = await uploadImage('avatars', avatarFile); if (url) avatar_url = url }
+    if (bannerFile) { const url = await uploadImage('banners', bannerFile); if (url) banner_url = url }
 
     const { error } = await db.from('profiles').upsert({ id: currentUser.id, username, bio, avatar_url, banner_url })
     if (error) {
@@ -429,6 +604,16 @@
     const msg = document.getElementById('post-msg')
     const content = input?.value.trim()
     if (!content) return
+
+    // Check if user is banned
+    if (currentProfile?.banned) {
+      const stillBanned = !currentProfile.banned_until || new Date(currentProfile.banned_until) > new Date()
+      if (stillBanned) {
+        if (msg) msg.innerHTML = `<div class="msg msg-error">You are banned from posting.</div>`
+        return
+      }
+    }
+
     const { error } = await db.from('posts').insert({ content, community: currentCommunity, user_id: currentUser.id })
     if (error) {
       if (msg) msg.innerHTML = `<div class="msg msg-error">Could not post. Try again.</div>`
