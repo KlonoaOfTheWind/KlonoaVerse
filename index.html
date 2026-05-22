@@ -40,14 +40,21 @@
     .card-title { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
     .community-item { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.12s; }
     .community-item:hover, .community-item.active { background: var(--surface2); }
-    .community-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .community-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+    .community-icon img { width: 100%; height: 100%; object-fit: cover; }
     .community-name { font-size: 13px; font-weight: 700; color: var(--text); }
     .profile-card { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .avatar { border-radius: 50%; background: var(--accent-light); color: var(--accent); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; overflow: hidden; }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
     .main { display: flex; flex-direction: column; gap: 12px; }
-    .community-header { background: var(--accent); border-radius: var(--radius); padding: 1rem 1.25rem; }
-    .community-header h2 { font-family: 'Fredoka One', cursive; font-size: 20px; color: #fff; }
+    .community-header { border-radius: var(--radius); overflow: hidden; }
+    .community-header-banner { height: 120px; background: linear-gradient(135deg, #2d7d5e, #5ba68a); position: relative; overflow: hidden; }
+    .community-header-banner img { width: 100%; height: 100%; object-fit: cover; }
+    .community-header-info { background: var(--accent); padding: 10px 1.25rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .community-header-left { display: flex; align-items: center; gap: 12px; }
+    .community-header-icon { width: 48px; height: 48px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; margin-top: -24px; border: 3px solid rgba(255,255,255,0.3); }
+    .community-header-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .community-header h2 { font-family: 'Fredoka One', cursive; font-size: 18px; color: #fff; }
     .community-header p { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 2px; }
     .new-post { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
     .new-post-row { display: flex; gap: 10px; align-items: flex-start; }
@@ -84,40 +91,40 @@
     .badge-admin { background: #fff3cd; color: #856404; }
     .badge-banned { background: var(--red-light); color: var(--red); }
     .badge-warned { background: var(--amber-light); color: var(--amber); }
-
-    /* PROFILE PAGE */
     .profile-page { max-width: 680px; margin: 0 auto; padding: 0 1rem 2rem; }
     .profile-banner { width: 100%; height: 160px; background: linear-gradient(135deg, #2d7d5e, #5ba68a); border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; position: relative; }
     .profile-banner img { width: 100%; height: 100%; object-fit: cover; }
     .profile-banner-edit { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 20px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
     .profile-info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); padding: 0 1.25rem 1.25rem; margin-bottom: 1rem; }
     .profile-avatar-wrap { position: relative; display: inline-block; margin-top: -36px; margin-bottom: 8px; }
-    .profile-username { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .profile-username { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--text); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .profile-bio { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
     .profile-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-
-    /* EDIT PROFILE */
     .edit-wrap { max-width: 500px; margin: 2rem auto; padding: 0 1rem; }
     .upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; cursor: pointer; transition: border 0.15s; background: var(--surface2); }
     .upload-area:hover { border-color: var(--accent2); }
     .upload-area img { max-height: 120px; max-width: 100%; border-radius: var(--radius-sm); margin-bottom: 8px; }
     .upload-label { font-size: 12px; color: var(--text2); }
-
-    /* MAINTENANCE */
     .maintenance { text-align: center; padding: 4rem 1rem; }
     .maintenance-icon { font-size: 60px; margin-bottom: 1rem; }
     .maintenance h1 { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--accent); margin-bottom: 8px; }
     .maintenance p { font-size: 14px; color: var(--text2); }
-
-    /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-    .modal { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; max-width: 400px; width: 100%; }
+    .modal { background: var(--surface); border-radius: var(--radius); padding: 1.5rem; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
     .modal h3 { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--text); margin-bottom: 1rem; }
     .modal-actions { display: flex; gap: 8px; margin-top: 1rem; }
-
-    /* ADMIN PANEL */
     .admin-bar { background: #fff3cd; border: 1px solid #f0d060; border-radius: var(--radius); padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
     .admin-bar-title { font-size: 13px; font-weight: 700; color: #856404; }
+    .community-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .community-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: transform 0.15s; }
+    .community-card:hover { transform: translateY(-2px); }
+    .community-card-banner { height: 70px; background: linear-gradient(135deg, #2d7d5e, #5ba68a); position: relative; overflow: hidden; }
+    .community-card-banner img { width: 100%; height: 100%; object-fit: cover; }
+    .community-card-body { padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+    .community-card-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; margin-top: -24px; border: 2px solid #fff; }
+    .community-card-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .community-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 8px; }
+    .community-card-desc { font-size: 11px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   </style>
 </head>
 <body>
@@ -132,23 +139,15 @@
 <div id="modal-container"></div>
 
 <script>
-  const SUPABASE_URL = 'https://jvxhqzmybeeeanflazuo.supabase.co'
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2eGhxem15YmVlZWFuZmxhenVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTYxMjIsImV4cCI6MjA5NDk3MjEyMn0.swj3-6nFWPlXjqttBWPEBssv-1TFmJ71xLLnaRlIzSI'
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL'
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'
 
   const { createClient } = supabase
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-  const COMMUNITIES = [
-    { id: 'klonoa', name: 'Klonoa', icon: '🌀', desc: 'Klonoa games, mods and decompilations', color: '#ede8fa' },
-    { id: 'sonic', name: 'Sonic', icon: '💨', desc: 'All things Sonic the Hedgehog', color: '#dceeff' },
-    { id: 'retro', name: 'Retro gaming', icon: '🕹️', desc: 'Classic consoles and games', color: '#e8f4d4' },
-    { id: 'modding', name: 'Modding', icon: '🔧', desc: 'ROM hacks, mods and tools', color: '#fef3d4' },
-    { id: 'general', name: 'General', icon: '💬', desc: 'Anything goes', color: '#fce8f0' },
-  ]
-
   let currentUser = null
   let currentProfile = null
-  let currentCommunity = 'klonoa'
+  let currentCommunity = null // now an object from DB
   let authMode = 'signin'
   let profileCache = {}
   let maintenanceMode = false
@@ -159,12 +158,9 @@
     const { data: { session } } = await db.auth.getSession()
     currentUser = session?.user ?? null
     if (currentUser) await loadCurrentProfile()
-    // Check maintenance mode
-    const { data } = await db.from('profiles').select('role').eq('role', 'admin').limit(1)
-    const mm = localStorage.getItem('kv_maintenance') === 'true'
-    maintenanceMode = mm
+    maintenanceMode = localStorage.getItem('kv_maintenance') === 'true'
     updateNav()
-    renderApp()
+    renderHome()
   }
 
   async function loadCurrentProfile() {
@@ -177,6 +173,13 @@
       return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${profile.avatar_url}" alt="avatar" /></div>`
     }
     return `<div class="avatar" style="width:${size}px;height:${size}px;font-size:${Math.floor(size*0.35)}px;">${(profile?.username?.[0] ?? '?').toUpperCase()}</div>`
+  }
+
+  function getCommunityIconHtml(community, size = 32) {
+    if (community?.icon_url) {
+      return `<div class="community-icon" style="width:${size}px;height:${size}px;"><img src="${community.icon_url}" alt="icon" /></div>`
+    }
+    return `<div class="community-icon" style="width:${size}px;height:${size}px;background:#e8f4d4;font-size:${Math.floor(size*0.5)}px;">🌀</div>`
   }
 
   function updateNav() {
@@ -196,50 +199,90 @@
 
   function handleAuthBtn() {
     if (currentUser) {
-      db.auth.signOut().then(() => { currentUser = null; currentProfile = null; profileCache = {}; updateNav(); renderApp() })
-    } else {
-      renderAuth()
-    }
+      db.auth.signOut().then(() => { currentUser = null; currentProfile = null; profileCache = {}; updateNav(); renderHome() })
+    } else { renderAuth() }
   }
 
-  function showHome() { renderApp() }
+  function showHome() { currentCommunity = null; renderHome() }
   function showOwnProfile() { if (currentUser) renderProfile(currentUser.id) }
 
-  function renderApp() {
+  async function renderHome() {
     if (currentUser && !currentProfile?.username) { renderUsernameSetup(); return }
-
-    // Show maintenance page to non-admins
     if (maintenanceMode && !isAdmin()) {
       document.getElementById('app').innerHTML = `
         <div class="maintenance">
           <div class="maintenance-icon">🔧</div>
           <h1>KlonoaVerse is under maintenance</h1>
           <p>We'll be back soon! Check back later.</p>
-        </div>
-      `
+        </div>`
       return
     }
 
-    const community = COMMUNITIES.find(c => c.id === currentCommunity)
+    document.getElementById('app').innerHTML = `<div class="loading">Loading communities...</div>`
+    const { data: communities } = await db.from('communities').select('*').eq('banned', false).order('created_at', { ascending: false })
+
+    document.getElementById('app').innerHTML = `
+      <div style="max-width:960px;margin:1.25rem auto;padding:0 1rem;">
+        ${isAdmin() ? `
+        <div class="admin-bar" style="margin-bottom:1rem;">
+          <span class="admin-bar-title">👑 Admin panel</span>
+          <button class="btn btn-amber" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Turn site ON' : '🔴 Turn site OFF'}</button>
+        </div>` : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--accent);">🌀 All communities</div>
+          ${currentUser ? `<button class="btn btn-accent" onclick="renderCreateCommunity()">+ New community</button>` : ''}
+        </div>
+        ${!communities || communities.length === 0
+          ? `<div class="empty"><div class="empty-icon">🌀</div>No communities yet — create the first one!</div>`
+          : `<div class="community-grid">${communities.map(c => `
+            <div class="community-card" onclick="openCommunity('${c.id}')">
+              <div class="community-card-banner">
+                ${c.banner_url ? `<img src="${c.banner_url}" alt="banner" />` : ''}
+              </div>
+              <div class="community-card-body">
+                <div class="community-card-icon">
+                  ${c.icon_url ? `<img src="${c.icon_url}" alt="icon" />` : '🌀'}
+                </div>
+                <div style="flex:1;min-width:0;margin-top:8px;">
+                  <div class="community-card-name">${escapeHtml(c.name)}</div>
+                  <div class="community-card-desc">${escapeHtml(c.description ?? '')}</div>
+                </div>
+              </div>
+            </div>
+          `).join('')}</div>`
+        }
+      </div>
+    `
+  }
+
+  async function openCommunity(communityId) {
+    const { data: community } = await db.from('communities').select('*').eq('id', communityId).single()
+    if (!community) return
+    currentCommunity = community
+    renderCommunityPage()
+  }
+
+  function renderCommunityPage() {
+    const c = currentCommunity
+    const isOwner = currentUser?.id === c.owner_id
+    const canEdit = isOwner || isAdmin()
+    const isBanned = c.banned
+
     document.getElementById('app').innerHTML = `
       <div class="layout">
         <aside class="sidebar">
           <div class="card">
-            <div class="card-title">Communities</div>
-            ${COMMUNITIES.map(c => `
-              <div class="community-item ${c.id === currentCommunity ? 'active' : ''}" onclick="switchCommunity('${c.id}')">
-                <div class="community-icon" style="background:${c.color}">${c.icon}</div>
-                <div><div class="community-name">${c.name}</div></div>
-              </div>
-            `).join('')}
+            <div class="card-title">Community info</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;">${escapeHtml(c.description ?? 'No description')}</div>
+            ${canEdit ? `<button class="btn btn-accent" style="width:100%;margin-top:12px;" onclick="renderEditCommunity('${c.id}')">✏️ Edit community</button>` : ''}
+            <button class="btn" style="width:100%;margin-top:8px;background:var(--surface2);color:var(--text2);" onclick="showHome()">← All communities</button>
           </div>
           ${currentUser ? `
           <div class="card">
-            <div class="card-title">Your profile</div>
             <div class="profile-card" onclick="showOwnProfile()">
               ${getAvatarHtml(currentProfile, 38)}
               <div>
-                <div style="font-size:13px;font-weight:700;">${currentProfile?.username ?? currentUser.email?.split('@')[0]}${isAdmin() ? ' 👑' : ''}</div>
+                <div style="font-size:13px;font-weight:700;">${currentProfile?.username ?? ''}${isAdmin() ? ' 👑' : ''}</div>
                 <div style="font-size:11px;color:var(--text2);">View profile</div>
               </div>
             </div>
@@ -248,18 +291,38 @@
         <main class="main">
           ${isAdmin() ? `
           <div class="admin-bar">
-            <span class="admin-bar-title">👑 Admin panel</span>
-            <button class="btn btn-amber" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Turn site ON' : '🔴 Turn site OFF'}</button>
+            <span class="admin-bar-title">👑 Admin</span>
+            <button class="btn btn-amber" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Site ON' : '🔴 Site OFF'}</button>
+            ${isBanned
+              ? `<button class="btn btn-green" onclick="unbanCommunity('${c.id}')">✅ Unban community</button>`
+              : `<button class="btn btn-amber" onclick="warnCommunity('${c.id}', '${escapeHtml(c.name)}', ${c.warning_count ?? 0})">⚠️ Warn community</button>
+                 <button class="btn btn-red" onclick="banCommunity('${c.id}', '${escapeHtml(c.name)}')">🔨 Ban community</button>`
+            }
           </div>` : ''}
           <div class="community-header">
-            <h2>${community.icon} ${community.name} community</h2>
-            <p>${community.desc}</p>
+            <div class="community-header-banner">
+              ${c.banner_url ? `<img src="${c.banner_url}" alt="banner" />` : ''}
+            </div>
+            <div class="community-header-info">
+              <div class="community-header-left">
+                <div class="community-header-icon">
+                  ${c.icon_url ? `<img src="${c.icon_url}" alt="icon" />` : '🌀'}
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <h2 class="community-header h2" style="font-family:'Fredoka One',cursive;font-size:18px;color:#fff;">${escapeHtml(c.name)}</h2>
+                    ${c.warning_count > 0 ? `<span class="badge badge-warned">⚠️ ${c.warning_count} warning${c.warning_count > 1 ? 's' : ''}</span>` : ''}
+                  </div>
+                  <p style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;">${escapeHtml(c.description ?? '')}</p>
+                </div>
+              </div>
+            </div>
           </div>
           ${currentUser ? `
           <div class="new-post card">
             <div class="new-post-row">
               ${getAvatarHtml(currentProfile, 36)}
-              <textarea id="post-input" rows="3" placeholder="Write a post in ${community.name}..."></textarea>
+              <textarea id="post-input" rows="3" placeholder="Write a post in ${escapeHtml(c.name)}..."></textarea>
             </div>
             <div class="new-post-actions"><button class="btn btn-accent" onclick="submitPost()">Post</button></div>
             <div id="post-msg"></div>
@@ -276,43 +339,191 @@
     loadPosts()
   }
 
+  async function renderCreateCommunity() {
+    document.getElementById('app').innerHTML = `
+      <div class="edit-wrap">
+        <div class="card">
+          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--accent);margin-bottom:1.5rem;">🌀 Create community</div>
+          <div id="create-msg"></div>
+          <div class="field"><label>Community name *</label><input type="text" id="c-name" placeholder="e.g. Klonoa Fan Hub" maxlength="40" /></div>
+          <div class="field"><label>Description</label><textarea id="c-desc" rows="2" placeholder="What is this community about?"></textarea></div>
+          <div class="field">
+            <label>Banner image</label>
+            <div class="upload-area" onclick="document.getElementById('c-banner-input').click()">
+              <div id="c-banner-preview"><div class="upload-label">Click to upload banner</div></div>
+              <input type="file" id="c-banner-input" accept="image/*" style="display:none" onchange="previewImage('c-banner-input','c-banner-preview',false)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Community icon</label>
+            <div class="upload-area" onclick="document.getElementById('c-icon-input').click()">
+              <div id="c-icon-preview"><div class="upload-label">Click to upload icon</div></div>
+              <input type="file" id="c-icon-input" accept="image/*" style="display:none" onchange="previewImage('c-icon-input','c-icon-preview',true)" />
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn btn-accent btn-full" onclick="saveCommunity()">Create</button>
+            <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="showHome()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  async function renderEditCommunity(communityId) {
+    const { data: c } = await db.from('communities').select('*').eq('id', communityId).single()
+    if (!c) return
+    document.getElementById('app').innerHTML = `
+      <div class="edit-wrap">
+        <div class="card">
+          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--accent);margin-bottom:1.5rem;">✏️ Edit community</div>
+          <div id="edit-community-msg"></div>
+          <div class="field"><label>Community name *</label><input type="text" id="ec-name" value="${escapeHtml(c.name)}" maxlength="40" /></div>
+          <div class="field"><label>Description</label><textarea id="ec-desc" rows="2">${escapeHtml(c.description ?? '')}</textarea></div>
+          <div class="field">
+            <label>Banner image</label>
+            <div class="upload-area" onclick="document.getElementById('ec-banner-input').click()">
+              <div id="ec-banner-preview">
+                ${c.banner_url ? `<img src="${c.banner_url}" />` : '<div class="upload-label">Click to upload banner</div>'}
+              </div>
+              <input type="file" id="ec-banner-input" accept="image/*" style="display:none" onchange="previewImage('ec-banner-input','ec-banner-preview',false)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Community icon</label>
+            <div class="upload-area" onclick="document.getElementById('ec-icon-input').click()">
+              <div id="ec-icon-preview">
+                ${c.icon_url ? `<img src="${c.icon_url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;" />` : '<div class="upload-label">Click to upload icon</div>'}
+              </div>
+              <input type="file" id="ec-icon-input" accept="image/*" style="display:none" onchange="previewImage('ec-icon-input','ec-icon-preview',true)" />
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn btn-accent btn-full" onclick="updateCommunity('${c.id}', '${c.icon_url ?? ''}', '${c.banner_url ?? ''}')">Save</button>
+            <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="openCommunity('${c.id}')">Cancel</button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  async function saveCommunity() {
+    const msg = document.getElementById('create-msg')
+    const name = document.getElementById('c-name')?.value.trim()
+    const description = document.getElementById('c-desc')?.value.trim()
+    const iconFile = document.getElementById('c-icon-input')?.files[0]
+    const bannerFile = document.getElementById('c-banner-input')?.files[0]
+    if (!name) { if (msg) msg.innerHTML = `<div class="msg msg-error">Name is required!</div>`; return }
+    if (msg) msg.innerHTML = `<div class="msg msg-success">Creating...</div>`
+    let icon_url = null, banner_url = null
+    if (iconFile) icon_url = await uploadImage('community-icons', iconFile)
+    if (bannerFile) banner_url = await uploadImage('community-banners', bannerFile)
+    const { error } = await db.from('communities').insert({ name, description, icon_url, banner_url, owner_id: currentUser.id })
+    if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not create community!</div>` }
+    else { showHome() }
+  }
+
+  async function updateCommunity(communityId, existingIcon, existingBanner) {
+    const msg = document.getElementById('edit-community-msg')
+    const name = document.getElementById('ec-name')?.value.trim()
+    const description = document.getElementById('ec-desc')?.value.trim()
+    const iconFile = document.getElementById('ec-icon-input')?.files[0]
+    const bannerFile = document.getElementById('ec-banner-input')?.files[0]
+    if (!name) { if (msg) msg.innerHTML = `<div class="msg msg-error">Name is required!</div>`; return }
+    if (msg) msg.innerHTML = `<div class="msg msg-success">Saving...</div>`
+    let icon_url = existingIcon || null
+    let banner_url = existingBanner || null
+    if (iconFile) icon_url = await uploadImage('community-icons', iconFile)
+    if (bannerFile) banner_url = await uploadImage('community-banners', bannerFile)
+    const { error } = await db.from('communities').update({ name, description, icon_url, banner_url }).eq('id', communityId)
+    if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not save!</div>` }
+    else { openCommunity(communityId) }
+  }
+
+  // COMMUNITY ADMIN ACTIONS
+  async function warnCommunity(communityId, communityName, currentWarnings) {
+    showModal(`
+      <h3>⚠️ Warn "${communityName}"?</h3>
+      <p style="font-size:14px;color:var(--text2);">Currently has ${currentWarnings} warning(s). This will add a warning to the community.</p>
+      <div class="modal-actions">
+        <button class="btn btn-amber btn-full" onclick="doWarnCommunity('${communityId}', ${currentWarnings})">Yes, warn</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function doWarnCommunity(communityId, currentWarnings) {
+    closeModal()
+    await db.from('communities').update({ warning_count: currentWarnings + 1 }).eq('id', communityId)
+    openCommunity(communityId)
+  }
+
+  async function banCommunity(communityId, communityName) {
+    showModal(`
+      <h3>🔨 Ban "${communityName}"?</h3>
+      <p style="font-size:14px;color:var(--text2);">This community will be hidden from all users.</p>
+      <div class="modal-actions">
+        <button class="btn btn-red btn-full" onclick="doBanCommunity('${communityId}')">Yes, ban</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function doBanCommunity(communityId) {
+    closeModal()
+    await db.from('communities').update({ banned: true }).eq('id', communityId)
+    showHome()
+  }
+
+  async function unbanCommunity(communityId) {
+    showModal(`
+      <h3>✅ Unban this community?</h3>
+      <p style="font-size:14px;color:var(--text2);">It will become visible to all users again.</p>
+      <div class="modal-actions">
+        <button class="btn btn-green btn-full" onclick="doUnbanCommunity('${communityId}')">Yes, unban</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function doUnbanCommunity(communityId) {
+    closeModal()
+    await db.from('communities').update({ banned: false }).eq('id', communityId)
+    openCommunity(communityId)
+  }
+
   function toggleMaintenance() {
     maintenanceMode = !maintenanceMode
     localStorage.setItem('kv_maintenance', maintenanceMode)
-    renderApp()
+    renderHome()
   }
 
   async function loadPosts(containerId = 'posts-list', filterUserId = null) {
     let query = db.from('posts').select('*').order('created_at', { ascending: false }).limit(30)
     if (filterUserId) {
       query = query.eq('user_id', filterUserId)
-    } else {
-      query = query.eq('community', currentCommunity)
+    } else if (currentCommunity) {
+      query = query.eq('community_id', currentCommunity.id)
     }
     const { data, error } = await query
     const container = document.getElementById(containerId)
     if (!container) return
-
     if (error || !data || data.length === 0) {
       container.innerHTML = `<div class="empty"><div class="empty-icon">🌀</div>No posts yet!</div>`
       return
     }
-
     let yeahMap = {}
     if (currentUser) {
       const ids = data.map(p => p.id)
       const { data: yeahs } = await db.from('yeahs').select('post_id').eq('user_id', currentUser.id).in('post_id', ids)
       yeahs?.forEach(y => { yeahMap[y.post_id] = true })
     }
-
     const { data: yeahCounts } = await db.from('yeahs').select('post_id')
     const countMap = {}
     yeahCounts?.forEach(y => { countMap[y.post_id] = (countMap[y.post_id] || 0) + 1 })
-
     const userIds = [...new Set(data.map(p => p.user_id).filter(Boolean))]
     const { data: profiles } = await db.from('profiles').select('id, username, avatar_url, role').in('id', userIds)
     profiles?.forEach(p => { profileCache[p.id] = p })
-
     container.innerHTML = data.map(post => {
       const profile = profileCache[post.user_id] || {}
       const username = profile.username || post.user_id?.slice(0, 8) || 'Anonymous'
@@ -332,14 +543,12 @@
                 <span class="post-user" onclick="renderProfile('${post.user_id}')">${username}</span>
                 ${adminBadge}
               </div>
-              <div class="post-meta">${date} · ${post.community}</div>
+              <div class="post-meta">${date}</div>
             </div>
           </div>
           <div class="post-body">${escapeHtml(post.content)}</div>
           <div class="post-footer">
-            <button class="btn btn-yeah ${yeah ? 'active' : ''}" onclick="toggleYeah('${post.id}', ${yeah})">
-              Yeah! ${count > 0 ? count : ''}
-            </button>
+            <button class="btn btn-yeah ${yeah ? 'active' : ''}" onclick="toggleYeah('${post.id}', ${yeah})">Yeah! ${count > 0 ? count : ''}</button>
             ${isAdmin() ? `<button class="btn btn-red" onclick="confirmDeletePost('${post.id}')">🗑️ Delete</button>` : ''}
           </div>
         </div>
@@ -351,20 +560,11 @@
     document.getElementById('app').innerHTML = `<div class="loading" style="margin-top:3rem;">Loading profile...</div>`
     const { data: profile } = await db.from('profiles').select('*').eq('id', userId).single()
     if (!profile) { document.getElementById('app').innerHTML = `<div class="empty" style="margin-top:3rem;"><div class="empty-icon">😕</div>Profile not found</div>`; return }
-
     const isOwn = currentUser?.id === userId
     const isBanned = profile.banned && (!profile.banned_until || new Date(profile.banned_until) > new Date())
     const avatarContent = profile.avatar_url
       ? `<img src="${profile.avatar_url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;" />`
       : (profile.username?.[0] ?? '?').toUpperCase()
-
-    const warningInfo = profile.warning_count > 0
-      ? `<span class="badge badge-warned">⚠️ ${profile.warning_count} warning${profile.warning_count > 1 ? 's' : ''}</span>`
-      : ''
-    const bannedInfo = isBanned
-      ? `<span class="badge badge-banned">🔨 Banned${profile.banned_until ? ' until ' + new Date(profile.banned_until).toLocaleDateString('en-GB') : ' permanently'}</span>`
-      : ''
-
     document.getElementById('app').innerHTML = `
       <div class="profile-page">
         <div style="position:relative;">
@@ -379,20 +579,19 @@
             <div class="profile-username">
               ${profile.username ?? 'Unknown'}
               ${profile.role === 'admin' ? '<span class="badge badge-admin">👑 Admin</span>' : ''}
-              ${warningInfo}
-              ${bannedInfo}
+              ${profile.warning_count > 0 ? `<span class="badge badge-warned">⚠️ ${profile.warning_count} warning${profile.warning_count > 1 ? 's' : ''}</span>` : ''}
+              ${isBanned ? `<span class="badge badge-banned">🔨 Banned${profile.banned_until ? ' until ' + new Date(profile.banned_until).toLocaleDateString('en-GB') : ' permanently'}</span>` : ''}
             </div>
             ${profile.bio ? `<div class="profile-bio">${escapeHtml(profile.bio)}</div>` : ''}
             <div class="profile-actions">
               ${isOwn ? `<button class="btn btn-accent" onclick="renderEditProfile()">✏️ Edit profile</button>` : ''}
               ${isAdmin() && !isOwn ? `
-                <button class="btn btn-amber" onclick="warnUser('${userId}', '${profile.username}', ${profile.warning_count})">⚠️ Warn</button>
+                <button class="btn btn-amber" onclick="warnUser('${userId}', '${profile.username}', ${profile.warning_count ?? 0})">⚠️ Warn</button>
                 ${isBanned
                   ? `<button class="btn btn-green" onclick="unbanUser('${userId}', '${profile.username}')">✅ Unban</button>`
-                  : `<button class="btn btn-red" onclick="showBanModal('${userId}', '${profile.username}')">🔨 Ban</button>`
-                }
+                  : `<button class="btn btn-red" onclick="showBanModal('${userId}', '${profile.username}')">🔨 Ban</button>`}
               ` : ''}
-              <button class="btn btn-outline" style="color:var(--text2);border-color:var(--border);" onclick="showHome()">← Back</button>
+              <button class="btn" style="background:var(--surface2);color:var(--text2);" onclick="showHome()">← Back</button>
             </div>
           </div>
         </div>
@@ -403,7 +602,6 @@
     loadPosts('profile-posts', userId)
   }
 
-  // ADMIN ACTIONS
   function confirmDeletePost(postId) {
     showModal(`
       <h3>🗑️ Delete post?</h3>
@@ -424,21 +622,17 @@
   async function warnUser(userId, username, currentWarnings) {
     showModal(`
       <h3>⚠️ Warn ${username}?</h3>
-      <p style="font-size:14px;color:var(--text2);">They currently have ${currentWarnings} warning(s). This will send them a warning about their behaviour.</p>
+      <p style="font-size:14px;color:var(--text2);">They currently have ${currentWarnings} warning(s).</p>
       <div class="modal-actions">
-        <button class="btn btn-amber btn-full" onclick="sendWarning('${userId}')">Yes, warn</button>
+        <button class="btn btn-amber btn-full" onclick="sendWarning('${userId}', ${currentWarnings})">Yes, warn</button>
         <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
       </div>
     `)
   }
 
-  async function sendWarning(userId) {
+  async function sendWarning(userId, currentWarnings) {
     closeModal()
-    await db.from('profiles').update({ warning_count: db.rpc ? undefined : undefined }).eq('id', userId)
-    // Increment warning count
-    const { data } = await db.from('profiles').select('warning_count').eq('id', userId).single()
-    const newCount = (data?.warning_count ?? 0) + 1
-    await db.from('profiles').update({ warning_count: newCount }).eq('id', userId)
+    await db.from('profiles').update({ warning_count: currentWarnings + 1 }).eq('id', userId)
     renderProfile(userId)
   }
 
@@ -465,11 +659,7 @@
   async function banUser(userId) {
     const days = parseInt(document.getElementById('ban-duration').value)
     let banned_until = null
-    if (days > 0) {
-      const d = new Date()
-      d.setDate(d.getDate() + days)
-      banned_until = d.toISOString()
-    }
+    if (days > 0) { const d = new Date(); d.setDate(d.getDate() + days); banned_until = d.toISOString() }
     closeModal()
     await db.from('profiles').update({ banned: true, banned_until }).eq('id', userId)
     renderProfile(userId)
@@ -478,7 +668,6 @@
   async function unbanUser(userId, username) {
     showModal(`
       <h3>✅ Unban ${username}?</h3>
-      <p style="font-size:14px;color:var(--text2);">This will restore their access to KlonoaVerse.</p>
       <div class="modal-actions">
         <button class="btn btn-green btn-full" onclick="doUnban('${userId}')">Yes, unban</button>
         <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
@@ -496,13 +685,9 @@
     document.getElementById('modal-container').innerHTML = `
       <div class="modal-overlay" onclick="closeModal()">
         <div class="modal" onclick="event.stopPropagation()">${html}</div>
-      </div>
-    `
+      </div>`
   }
-
-  function closeModal() {
-    document.getElementById('modal-container').innerHTML = ''
-  }
+  function closeModal() { document.getElementById('modal-container').innerHTML = '' }
 
   function renderEditProfile() {
     document.getElementById('app').innerHTML = `
@@ -513,49 +698,35 @@
           <div class="field">
             <label>Banner image</label>
             <div class="upload-area" onclick="document.getElementById('banner-input').click()">
-              <div id="banner-preview">
-                ${currentProfile?.banner_url ? `<img src="${currentProfile.banner_url}" />` : ''}
-                <div class="upload-label">Click to upload banner (recommended: 1200x400px)</div>
-              </div>
-              <input type="file" id="banner-input" accept="image/*" style="display:none" onchange="previewImage('banner-input','banner-preview')" />
+              <div id="banner-preview">${currentProfile?.banner_url ? `<img src="${currentProfile.banner_url}" />` : '<div class="upload-label">Click to upload banner</div>'}</div>
+              <input type="file" id="banner-input" accept="image/*" style="display:none" onchange="previewImage('banner-input','banner-preview',false)" />
             </div>
           </div>
           <div class="field">
             <label>Profile picture</label>
             <div class="upload-area" onclick="document.getElementById('avatar-input').click()">
-              <div id="avatar-preview">
-                ${currentProfile?.avatar_url ? `<img src="${currentProfile.avatar_url}" style="border-radius:50%;width:80px;height:80px;object-fit:cover;" />` : ''}
-                <div class="upload-label">Click to upload profile picture</div>
-              </div>
-              <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="previewImage('avatar-input','avatar-preview')" />
+              <div id="avatar-preview">${currentProfile?.avatar_url ? `<img src="${currentProfile.avatar_url}" style="border-radius:50%;width:80px;height:80px;object-fit:cover;" />` : '<div class="upload-label">Click to upload profile picture</div>'}</div>
+              <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="previewImage('avatar-input','avatar-preview',true)" />
             </div>
           </div>
-          <div class="field">
-            <label>Username</label>
-            <input type="text" id="edit-username" value="${currentProfile?.username ?? ''}" maxlength="20" />
-          </div>
-          <div class="field">
-            <label>Bio</label>
-            <textarea id="edit-bio" rows="3" placeholder="Tell everyone about yourself...">${currentProfile?.bio ?? ''}</textarea>
-          </div>
+          <div class="field"><label>Username</label><input type="text" id="edit-username" value="${currentProfile?.username ?? ''}" maxlength="20" /></div>
+          <div class="field"><label>Bio</label><textarea id="edit-bio" rows="3" placeholder="Tell everyone about yourself...">${currentProfile?.bio ?? ''}</textarea></div>
           <div style="display:flex;gap:8px;margin-top:4px;">
             <button class="btn btn-accent btn-full" onclick="saveProfile()">Save</button>
             <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="showOwnProfile()">Cancel</button>
           </div>
         </div>
-      </div>
-    `
+      </div>`
   }
 
-  function previewImage(inputId, containerId) {
+  function previewImage(inputId, containerId, isSquare) {
     const file = document.getElementById(inputId)?.files[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = e => {
       const container = document.getElementById(containerId)
       if (container) {
-        const isAvatar = inputId === 'avatar-input'
-        container.innerHTML = `<img src="${e.target.result}" style="${isAvatar ? 'border-radius:50%;width:80px;height:80px;object-fit:cover;' : 'max-height:120px;max-width:100%;border-radius:8px;'}" /><div class="upload-label" style="margin-top:6px;">Click to change</div>`
+        container.innerHTML = `<img src="${e.target.result}" style="${isSquare ? 'width:80px;height:80px;object-fit:cover;border-radius:8px;' : 'max-height:120px;max-width:100%;border-radius:8px;'}" /><div class="upload-label" style="margin-top:6px;">Click to change</div>`
       }
     }
     reader.readAsDataURL(file)
@@ -576,27 +747,15 @@
     const bio = document.getElementById('edit-bio')?.value.trim()
     const avatarFile = document.getElementById('avatar-input')?.files[0]
     const bannerFile = document.getElementById('banner-input')?.files[0]
-
-    if (!username || username.length < 3) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`
-      return
-    }
+    if (!username || username.length < 3) { if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`; return }
     if (msg) msg.innerHTML = `<div class="msg msg-success">Saving...</div>`
-
     let avatar_url = currentProfile?.avatar_url ?? null
     let banner_url = currentProfile?.banner_url ?? null
-
     if (avatarFile) { const url = await uploadImage('avatars', avatarFile); if (url) avatar_url = url }
     if (bannerFile) { const url = await uploadImage('banners', bannerFile); if (url) banner_url = url }
-
     const { error } = await db.from('profiles').upsert({ id: currentUser.id, username, bio, avatar_url, banner_url })
-    if (error) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">Could not save. Username may be taken!</div>`
-    } else {
-      await loadCurrentProfile()
-      updateNav()
-      renderProfile(currentUser.id)
-    }
+    if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not save. Username may be taken!</div>` }
+    else { await loadCurrentProfile(); updateNav(); renderProfile(currentUser.id) }
   }
 
   async function submitPost() {
@@ -604,36 +763,21 @@
     const msg = document.getElementById('post-msg')
     const content = input?.value.trim()
     if (!content) return
-
-    // Check if user is banned
     if (currentProfile?.banned) {
       const stillBanned = !currentProfile.banned_until || new Date(currentProfile.banned_until) > new Date()
-      if (stillBanned) {
-        if (msg) msg.innerHTML = `<div class="msg msg-error">You are banned from posting.</div>`
-        return
-      }
+      if (stillBanned) { if (msg) msg.innerHTML = `<div class="msg msg-error">You are banned from posting.</div>`; return }
     }
-
-    const { error } = await db.from('posts').insert({ content, community: currentCommunity, user_id: currentUser.id })
-    if (error) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">Could not post. Try again.</div>`
-    } else {
-      if (input) input.value = ''
-      loadPosts()
-    }
+    const { error } = await db.from('posts').insert({ content, community_id: currentCommunity.id, user_id: currentUser.id, community: currentCommunity.name })
+    if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not post. Try again.</div>` }
+    else { if (input) input.value = ''; loadPosts() }
   }
 
   async function toggleYeah(postId, hasYeah) {
     if (!currentUser) { renderAuth(); return }
-    if (hasYeah) {
-      await db.from('yeahs').delete().eq('post_id', postId).eq('user_id', currentUser.id)
-    } else {
-      await db.from('yeahs').insert({ post_id: postId, user_id: currentUser.id })
-    }
+    if (hasYeah) { await db.from('yeahs').delete().eq('post_id', postId).eq('user_id', currentUser.id) }
+    else { await db.from('yeahs').insert({ post_id: postId, user_id: currentUser.id }) }
     loadPosts()
   }
-
-  function switchCommunity(id) { currentCommunity = id; renderApp() }
 
   function renderUsernameSetup() {
     document.getElementById('app').innerHTML = `
@@ -645,26 +789,17 @@
           <div class="field"><label>Username</label><input type="text" id="username-input" placeholder="e.g. WindDreamer" maxlength="20" /></div>
           <button class="btn btn-accent btn-full" onclick="saveUsername()">Let's go!</button>
         </div>
-      </div>
-    `
+      </div>`
   }
 
   async function saveUsername() {
     const input = document.getElementById('username-input')
     const msg = document.getElementById('auth-msg')
     const username = input?.value.trim()
-    if (!username || username.length < 3) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`
-      return
-    }
+    if (!username || username.length < 3) { if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`; return }
     const { error } = await db.from('profiles').upsert({ id: currentUser.id, username })
-    if (error) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">That username may be taken, try another!</div>`
-    } else {
-      currentProfile = { username }
-      updateNav()
-      renderApp()
-    }
+    if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">That username may be taken, try another!</div>` }
+    else { currentProfile = { username }; updateNav(); renderHome() }
   }
 
   function renderAuth() {
@@ -676,20 +811,13 @@
           <div id="auth-msg"></div>
           <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="you@example.com" /></div>
           <div class="field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" /></div>
-          <button class="btn btn-accent btn-full" onclick="handleAuth()">
-            ${authMode === 'signin' ? 'Sign in' : 'Sign up'}
-          </button>
+          <button class="btn btn-accent btn-full" onclick="handleAuth()">${authMode === 'signin' ? 'Sign in' : 'Sign up'}</button>
           <div class="auth-switch">
-            ${authMode === 'signin'
-              ? "Don't have an account? <a onclick='toggleAuthMode()'>Sign up</a>"
-              : "Already have an account? <a onclick='toggleAuthMode()'>Sign in</a>"}
+            ${authMode === 'signin' ? "Don't have an account? <a onclick='toggleAuthMode()'>Sign up</a>" : "Already have an account? <a onclick='toggleAuthMode()'>Sign in</a>"}
           </div>
-          <div class="auth-switch" style="margin-top:8px;">
-            <a onclick="renderApp()" style="color:var(--text2);">Back to KlonoaVerse</a>
-          </div>
+          <div class="auth-switch" style="margin-top:8px;"><a onclick="renderHome()" style="color:var(--text2);">Back to KlonoaVerse</a></div>
         </div>
-      </div>
-    `
+      </div>`
   }
 
   function toggleAuthMode() { authMode = authMode === 'signin' ? 'signup' : 'signin'; renderAuth() }
@@ -700,34 +828,21 @@
     const msg = document.getElementById('auth-msg')
     if (!email || !password) return
     let result
-    if (authMode === 'signup') {
-      result = await db.auth.signUp({ email, password })
-    } else {
-      result = await db.auth.signInWithPassword({ email, password })
-    }
-    if (result.error) {
-      if (msg) msg.innerHTML = `<div class="msg msg-error">${result.error.message}</div>`
-    } else {
-      if (authMode === 'signup') {
-        if (msg) msg.innerHTML = `<div class="msg msg-success">Check your email to confirm your account!</div>`
-      } else {
-        currentUser = result.data.user
-        await loadCurrentProfile()
-        updateNav()
-        renderApp()
-      }
+    if (authMode === 'signup') { result = await db.auth.signUp({ email, password }) }
+    else { result = await db.auth.signInWithPassword({ email, password }) }
+    if (result.error) { if (msg) msg.innerHTML = `<div class="msg msg-error">${result.error.message}</div>` }
+    else {
+      if (authMode === 'signup') { if (msg) msg.innerHTML = `<div class="msg msg-success">Check your email to confirm your account!</div>` }
+      else { currentUser = result.data.user; await loadCurrentProfile(); updateNav(); renderHome() }
     }
   }
 
   function escapeHtml(str) {
+    if (!str) return ''
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
   }
 
-  db.auth.onAuthStateChange((event, session) => {
-    currentUser = session?.user ?? null
-    updateNav()
-  })
-
+  db.auth.onAuthStateChange((event, session) => { currentUser = session?.user ?? null; updateNav() })
   init()
 </script>
 </body>
