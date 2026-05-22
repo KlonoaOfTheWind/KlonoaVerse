@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KlonoaVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #e8f4f0;
+      --surface: #ffffff;
+      --surface2: #f0faf6;
+      --border: #c2e0d8;
+      --accent: #2d7d5e;
+      --accent2: #5ba68a;
+      --accent-light: #d4f0e6;
+      --text: #1a3a2e;
+      --text2: #4a7a66;
+      --yeah: #e05a8a;
+      --yeah-light: #fce8f0;
+      --purple: #7c5cbf;
+      --purple-light: #ede8fa;
+      --amber: #d4900a;
+      --amber-light: #fef3d4;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    
+    /* NAV */
+    nav { background: var(--accent); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Fredoka One', cursive; font-size: 22px; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .nav-logo span { font-size: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-user { font-size: 13px; color: rgba(255,255,255,0.85); }
+    .btn { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-white { background: #fff; color: var(--accent); }
+    .btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.5); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-yeah { background: var(--yeah-light); color: var(--yeah); border: 1.5px solid #f0b8cf; font-size: 12px; padding: 4px 10px; }
+    .btn-yeah.active { background: var(--yeah); color: #fff; border-color: var(--yeah); }
+
+    /* LAYOUT */
+    .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.25rem; max-width: 960px; margin: 1.25rem auto; padding: 0 1rem; }
+    @media (max-width: 640px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+    .card-title { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+    .community-item { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.12s; }
+    .community-item:hover, .community-item.active { background: var(--surface2); }
+    .community-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .community-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .community-count { font-size: 11px; color: var(--text2); }
+    .profile-card { display: flex; align-items: center; gap: 10px; }
+    .avatar { border-radius: 50%; background: var(--accent-light); color: var(--accent); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+
+    /* MAIN */
+    .main { display: flex; flex-direction: column; gap: 12px; }
+    .community-header { background: var(--accent); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+    .community-header h2 { font-family: 'Fredoka One', cursive; font-size: 20px; color: #fff; }
+    .community-header p { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-green { background: var(--accent-light); color: var(--accent); }
+    .badge-purple { background: var(--purple-light); color: var(--purple); }
+
+    /* NEW POST */
+    .new-post { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+    .new-post-row { display: flex; gap: 10px; align-items: flex-start; }
+    textarea { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; width: 100%; resize: none; outline: none; transition: border 0.15s; }
+    textarea:focus { border-color: var(--accent2); }
+    .new-post-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+    /* POST */
+    .post { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .post-user { font-size: 14px; font-weight: 700; color: var(--text); }
+    .post-meta { font-size: 11px; color: var(--text2); }
+    .post-body { font-size: 14px; color: var(--text); line-height: 1.65; margin-bottom: 12px; }
+    .post-footer { display: flex; align-items: center; gap: 12px; }
+    .post-community-tag { font-size: 11px; color: var(--text2); margin-left: auto; }
+
+    /* AUTH */
+    .auth-wrap { max-width: 400px; margin: 3rem auto; padding: 0 1rem; }
+    .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+    .auth-title { font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--accent); text-align: center; margin-bottom: 4px; }
+    .auth-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 1.5rem; }
+    .field { margin-bottom: 12px; }
+    .field label { font-size: 12px; font-weight: 700; color: var(--text2); display: block; margin-bottom: 4px; }
+    input[type=text], input[type=email], input[type=password] { font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; width: 100%; outline: none; transition: border 0.15s; }
+    input:focus { border-color: var(--accent2); }
+    .btn-full { width: 100%; padding: 10px; font-size: 15px; border-radius: var(--radius-sm); margin-top: 4px; }
+    .auth-switch { font-size: 13px; color: var(--text2); text-align: center; margin-top: 1rem; }
+    .auth-switch a { color: var(--accent); cursor: pointer; font-weight: 700; text-decoration: none; }
+    .msg { font-size: 12px; padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; text-align: center; }
+    .msg-error { background: #fce8e8; color: #c0392b; }
+    .msg-success { background: var(--accent-light); color: var(--accent); }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 14px; }
+    .empty-icon { font-size: 40px; margin-bottom: 8px; }
+
+    .loading { text-align: center; padding: 2rem; color: var(--text2); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">🌀 KlonoaVerse</div>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-username"></span>
+    <button class="btn btn-outline" id="nav-auth-btn" onclick="handleAuthBtn()">Sign in</button>
+  </div>
+</nav>
+
+<div id="app"></div>
+
+<script>
+  // =============================================
+  // PASTE YOUR SUPABASE DETAILS HERE
+  const SUPABASE_URL = 'https://jvxhqzmybeeeanflazuo.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2eGhxem15YmVlZWFuZmxhenVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTYxMjIsImV4cCI6MjA5NDk3MjEyMn0.swj3-6nFWPlXjqttBWPEBssv-1TFmJ71xLLnaRlIzSI'
+  // =============================================
+
+  const { createClient } = supabase
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+  const COMMUNITIES = [
+    { id: 'klonoa', name: 'Klonoa', icon: '🌀', desc: 'Klonoa games, mods and decompilations', color: '#ede8fa' },
+    { id: 'sonic', name: 'Sonic', icon: '💨', desc: 'All things Sonic the Hedgehog', color: '#dceeff' },
+    { id: 'retro', name: 'Retro gaming', icon: '🕹️', desc: 'Classic consoles and games', color: '#e8f4d4' },
+    { id: 'modding', name: 'Modding', icon: '🔧', desc: 'ROM hacks, mods and tools', color: '#fef3d4' },
+    { id: 'general', name: 'General', icon: '💬', desc: 'Anything goes', color: '#fce8f0' },
+  ]
+
+  let currentUser = null
+  let currentCommunity = 'klonoa'
+  let authMode = 'signin'
+
+  async function init() {
+    const { data: { session } } = await db.auth.getSession()
+    currentUser = session?.user ?? null
+    updateNav()
+    renderApp()
+  }
+
+  function updateNav() {
+    const btn = document.getElementById('nav-auth-btn')
+    const userEl = document.getElementById('nav-username')
+    if (currentUser) {
+      userEl.textContent = currentUser.email?.split('@')[0] ?? 'User'
+      btn.textContent = 'Sign out'
+      btn.className = 'btn btn-outline'
+    } else {
+      userEl.textContent = ''
+      btn.textContent = 'Sign in'
+      btn.className = 'btn btn-white'
+    }
+  }
+
+  function handleAuthBtn() {
+    if (currentUser) {
+      db.auth.signOut().then(() => { currentUser = null; updateNav(); renderApp() })
+    } else {
+      renderAuth()
+    }
+  }
+
+  function renderApp() {
+    const community = COMMUNITIES.find(c => c.id === currentCommunity)
+    document.getElementById('app').innerHTML = `
+      <div class="layout">
+        <aside class="sidebar">
+          <div class="card">
+            <div class="card-title">Communities</div>
+            ${COMMUNITIES.map(c => `
+              <div class="community-item ${c.id === currentCommunity ? 'active' : ''}" onclick="switchCommunity('${c.id}')">
+                <div class="community-icon" style="background:${c.color}">${c.icon}</div>
+                <div>
+                  <div class="community-name">${c.name}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          ${currentUser ? `
+          <div class="card">
+            <div class="card-title">Your profile</div>
+            <div class="profile-card">
+              <div class="avatar" style="width:38px;height:38px;">${(currentUser.email?.[0] ?? '?').toUpperCase()}</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;">${currentUser.email?.split('@')[0]}</div>
+                <div style="font-size:11px;color:var(--text2);">Member</div>
+              </div>
+            </div>
+          </div>` : ''}
+        </aside>
+        <main class="main">
+          <div class="community-header">
+            <div>
+              <h2>${community.icon} ${community.name} community</h2>
+              <p>${community.desc}</p>
+            </div>
+          </div>
+          ${currentUser ? `
+          <div class="new-post card">
+            <div class="new-post-row">
+              <div class="avatar" style="width:36px;height:36px;margin-top:2px;">${(currentUser.email?.[0] ?? '?').toUpperCase()}</div>
+              <textarea id="post-input" rows="3" placeholder="Write a post in ${community.name}..."></textarea>
+            </div>
+            <div class="new-post-actions">
+              <button class="btn btn-accent" onclick="submitPost()">Post</button>
+            </div>
+            <div id="post-msg"></div>
+          </div>` : `
+          <div class="card" style="text-align:center;padding:1rem;">
+            <span style="font-size:13px;color:var(--text2);">
+              <a href="#" onclick="renderAuth()" style="color:var(--accent);font-weight:700;">Sign in</a> to post in this community
+            </span>
+          </div>`}
+          <div id="posts-list"><div class="loading">Loading posts...</div></div>
+        </main>
+      </div>
+    `
+    loadPosts()
+  }
+
+  async function loadPosts() {
+    const { data, error } = await db
+      .from('posts')
+      .select('*')
+      .eq('community', currentCommunity)
+      .order('created_at', { ascending: false })
+      .limit(30)
+
+    const container = document.getElementById('posts-list')
+    if (!container) return
+
+    if (error || !data || data.length === 0) {
+      container.innerHTML = `<div class="empty"><div class="empty-icon">🌀</div>No posts yet — be the first!</div>`
+      return
+    }
+
+    let yeahMap = {}
+    if (currentUser) {
+      const ids = data.map(p => p.id)
+      const { data: yeahs } = await db.from('yeahs').select('post_id').eq('user_id', currentUser.id).in('post_id', ids)
+      yeahs?.forEach(y => { yeahMap[y.post_id] = true })
+    }
+
+    const { data: yeahCounts } = await db.from('yeahs').select('post_id')
+    const countMap = {}
+    yeahCounts?.forEach(y => { countMap[y.post_id] = (countMap[y.post_id] || 0) + 1 })
+
+    container.innerHTML = data.map(post => {
+      const username = post.user_id?.slice(0, 8) ?? 'Anonymous'
+      const initial = username[0].toUpperCase()
+      const date = new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+      const yeah = yeahMap[post.id]
+      const count = countMap[post.id] || 0
+      return `
+        <div class="post" id="post-${post.id}">
+          <div class="post-header">
+            <div class="avatar" style="width:36px;height:36px;">${initial}</div>
+            <div>
+              <div class="post-user">${username}</div>
+              <div class="post-meta">${date}</div>
+            </div>
+          </div>
+          <div class="post-body">${escapeHtml(post.content)}</div>
+          <div class="post-footer">
+            <button class="btn btn-yeah ${yeah ? 'active' : ''}" onclick="toggleYeah('${post.id}', ${yeah})">
+              Yeah! ${count > 0 ? count : ''}
+            </button>
+          </div>
+        </div>
+      `
+    }).join('')
+  }
+
+  async function submitPost() {
+    const input = document.getElementById('post-input')
+    const msg = document.getElementById('post-msg')
+    const content = input?.value.trim()
+    if (!content) return
+    const { error } = await db.from('posts').insert({ content, community: currentCommunity, user_id: currentUser.id })
+    if (error) {
+      if (msg) msg.innerHTML = `<div class="msg msg-error">Could not post. Try again.</div>`
+    } else {
+      if (input) input.value = ''
+      loadPosts()
+    }
+  }
+
+  async function toggleYeah(postId, hasYeah) {
+    if (!currentUser) { renderAuth(); return }
+    if (hasYeah) {
+      await db.from('yeahs').delete().eq('post_id', postId).eq('user_id', currentUser.id)
+    } else {
+      await db.from('yeahs').insert({ post_id: postId, user_id: currentUser.id })
+    }
+    loadPosts()
+  }
+
+  function switchCommunity(id) {
+    currentCommunity = id
+    renderApp()
+  }
+
+  function renderAuth() {
+    document.getElementById('app').innerHTML = `
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-title">🌀 KlonoaVerse</div>
+          <div class="auth-sub">${authMode === 'signin' ? 'Welcome back!' : 'Create an account'}</div>
+          <div id="auth-msg"></div>
+          <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="you@example.com" /></div>
+          <div class="field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" /></div>
+          <button class="btn btn-accent btn-full" onclick="handleAuth()">
+            ${authMode === 'signin' ? 'Sign in' : 'Sign up'}
+          </button>
+          <div class="auth-switch">
+            ${authMode === 'signin'
+              ? `Don't have an account? <a onclick="toggleAuthMode()">Sign up</a>`
+              : `Already have an account? <a onclick="toggleAuthMode()">Sign in</a>`}
+          </div>
+          <div class="auth-switch" style="margin-top:8px;">
+            <a onclick="renderApp()" style="color:var(--text2);">Back to KlonoaVerse</a>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  function toggleAuthMode() {
+    authMode = authMode === 'signin' ? 'signup' : 'signin'
+    renderAuth()
+  }
+
+  async function handleAuth() {
+    const email = document.getElementById('auth-email')?.value.trim()
+    const password = document.getElementById('auth-password')?.value
+    const msg = document.getElementById('auth-msg')
+    if (!email || !password) return
+
+    let result
+    if (authMode === 'signup') {
+      result = await db.auth.signUp({ email, password })
+    } else {
+      result = await db.auth.signInWithPassword({ email, password })
+    }
+
+    if (result.error) {
+      if (msg) msg.innerHTML = `<div class="msg msg-error">${result.error.message}</div>`
+    } else {
+      if (authMode === 'signup') {
+        if (msg) msg.innerHTML = `<div class="msg msg-success">Check your email to confirm your account!</div>`
+      } else {
+        currentUser = result.data.user
+        updateNav()
+        renderApp()
+      }
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
+  db.auth.onAuthStateChange((event, session) => {
+    currentUser = session?.user ?? null
+    updateNav()
+  })
+
+  init()
+</script>
+</body>
+</html>
