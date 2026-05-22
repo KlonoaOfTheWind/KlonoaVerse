@@ -129,6 +129,17 @@
     .upload-area img { max-height: 120px; max-width: 100%; border-radius: var(--radius-sm); margin-bottom: 8px; }
     .upload-label { font-size: 12px; color: var(--text2); }
 
+    /* BACKGROUND */
+    .page-bg { position: fixed; inset: 0; z-index: -1; background-size: cover; background-position: center; background-attachment: fixed; transition: opacity 0.3s; }
+    .page-bg::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+
+    /* MUSIC PLAYER */
+    .music-player { position: fixed; bottom: 16px; right: 16px; z-index: 150; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); border-radius: 30px; padding: 8px 14px; display: flex; align-items: center; gap: 10px; color: #fff; font-size: 12px; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .music-player-icon { font-size: 16px; cursor: pointer; }
+    .music-player-title { max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.85; }
+    .music-player-close { cursor: pointer; opacity: 0.6; font-size: 14px; }
+    .music-player-close:hover { opacity: 1; }
+
     /* MAINTENANCE */
     .maintenance { text-align: center; padding: 4rem 1rem; }
     .maintenance-icon { font-size: 60px; margin-bottom: 1rem; }
@@ -171,8 +182,15 @@
     <button class="btn btn-outline" id="nav-auth-btn" onclick="handleAuthBtn()">Sign in</button>
   </div>
 </nav>
+<div id="page-bg" class="page-bg" style="display:none;"></div>
 <div id="app"></div>
 <div id="modal-container"></div>
+<div id="music-player" style="display:none;" class="music-player">
+  <span class="music-player-icon" id="music-toggle" onclick="toggleMusic()">⏸️</span>
+  <span class="music-player-title" id="music-title">Now playing</span>
+  <span class="music-player-close" onclick="stopMusic()">✕</span>
+</div>
+<iframe id="yt-player" width="0" height="0" style="display:none;" allow="autoplay"></iframe>
 
 <script>
   const SUPABASE_URL = 'https://jvxhqzmybeeeanflazuo.supabase.co'
@@ -194,13 +212,17 @@
   const isAdmin = () => currentProfile?.role === 'admin'
 
   async function init() {
+    maintenanceMode = localStorage.getItem("kv_maintenance") === "true"
     const { data: { session } } = await db.auth.getSession()
     currentUser = session?.user ?? null
     if (currentUser) {
-      await loadCurrentProfile()
-      await loadFollows()
+      try {
+        await loadCurrentProfile()
+        await loadFollows()
+      } catch(e) {
+        console.error("Profile load error:", e)
+      }
     }
-    maintenanceMode = localStorage.getItem('kv_maintenance') === 'true'
     updateNav()
     renderHome()
   }
@@ -269,7 +291,7 @@
     } else renderAuth()
   }
 
-  function showHome() { currentCommunity = null; feedTab = 'all'; renderHome() }
+  function showHome() { currentCommunity = null; feedTab = 'all'; setPageBackground(null); stopMusic(); renderHome() }
   function showOwnProfile() { if (currentUser) renderProfile(currentUser.id) }
 
   async function renderHome() {
@@ -452,6 +474,9 @@
     `
     loadSidebarCommunities()
     loadCommunityPosts()
+    setPageBackground(c.background_url)
+    if (c.music_url) playMusic(c.music_url, `${c.name} community`)
+    else stopMusic()
   }
 
   async function loadSidebarCommunities() {
@@ -592,6 +617,9 @@
       </div>
     `
     loadProfilePosts(userId)
+    setPageBackground(profile.background_url)
+    if (profile.music_url) playMusic(profile.music_url, `${profile.username}'s profile`)
+    else stopMusic()
   }
 
   async function handleFollowUser(userId) {
@@ -640,6 +668,18 @@
               <input type="file" id="c-icon-input" accept="image/*" style="display:none" onchange="previewImage('c-icon-input','c-icon-preview',true)" />
             </div>
           </div>
+          <div class="field">
+            <label>Background image</label>
+            <div class="upload-area" onclick="document.getElementById('c-bg-input').click()">
+              <div id="c-bg-preview"><div class="upload-label">Click to upload background image</div></div>
+              <input type="file" id="c-bg-input" accept="image/*" style="display:none" onchange="previewImage('c-bg-input','c-bg-preview',false)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Community music (YouTube URL)</label>
+            <input type="text" id="c-music" placeholder="https://www.youtube.com/watch?v=..." />
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;">Plays for everyone who visits this community</div>
+          </div>
           <div style="display:flex;gap:8px;margin-top:4px;">
             <button class="btn btn-accent btn-full" onclick="saveCommunity()">Create</button>
             <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="showHome()">Cancel</button>
@@ -672,8 +712,20 @@
               <input type="file" id="ec-icon-input" accept="image/*" style="display:none" onchange="previewImage('ec-icon-input','ec-icon-preview',true)" />
             </div>
           </div>
+          <div class="field">
+            <label>Background image</label>
+            <div class="upload-area" onclick="document.getElementById('ec-bg-input').click()">
+              <div id="ec-bg-preview">${c.background_url ? `<img src="${c.background_url}" />` : '<div class="upload-label">Click to upload background image</div>'}</div>
+              <input type="file" id="ec-bg-input" accept="image/*" style="display:none" onchange="previewImage('ec-bg-input','ec-bg-preview',false)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Community music (YouTube URL)</label>
+            <input type="text" id="ec-music" value="${c.music_url ?? ''}" placeholder="https://www.youtube.com/watch?v=..." />
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;">Plays for everyone who visits this community</div>
+          </div>
           <div style="display:flex;gap:8px;margin-top:4px;">
-            <button class="btn btn-accent btn-full" onclick="updateCommunity('${c.id}', '${c.icon_url ?? ''}', '${c.banner_url ?? ''}')">Save</button>
+            <button class="btn btn-accent btn-full" onclick="updateCommunity('${c.id}', '${c.icon_url ?? ''}', '${c.banner_url ?? ''}', '${c.background_url ?? ''}')">Save</button>
             <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="openCommunity('${c.id}')">Cancel</button>
           </div>
         </div>
@@ -684,31 +736,38 @@
     const msg = document.getElementById('create-msg')
     const name = document.getElementById('c-name')?.value.trim()
     const description = document.getElementById('c-desc')?.value.trim()
+    const music_url = document.getElementById('c-music')?.value.trim() || null
     const iconFile = document.getElementById('c-icon-input')?.files[0]
     const bannerFile = document.getElementById('c-banner-input')?.files[0]
+    const bgFile = document.getElementById('c-bg-input')?.files[0]
     if (!name) { if (msg) msg.innerHTML = `<div class="msg msg-error">Name is required!</div>`; return }
     if (msg) msg.innerHTML = `<div class="msg msg-success">Creating...</div>`
-    let icon_url = null, banner_url = null
+    let icon_url = null, banner_url = null, background_url = null
     if (iconFile) icon_url = await uploadImage('community-icons', iconFile)
     if (bannerFile) banner_url = await uploadImage('community-banners', bannerFile)
-    const { error } = await db.from('communities').insert({ name, description, icon_url, banner_url, owner_id: currentUser.id })
+    if (bgFile) background_url = await uploadImage('backgrounds', bgFile)
+    const { error } = await db.from('communities').insert({ name, description, icon_url, banner_url, background_url, music_url, owner_id: currentUser.id })
     if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not create community!</div>` }
     else { showHome() }
   }
 
-  async function updateCommunity(communityId, existingIcon, existingBanner) {
+  async function updateCommunity(communityId, existingIcon, existingBanner, existingBg) {
     const msg = document.getElementById('edit-community-msg')
     const name = document.getElementById('ec-name')?.value.trim()
     const description = document.getElementById('ec-desc')?.value.trim()
+    const music_url = document.getElementById('ec-music')?.value.trim() || null
     const iconFile = document.getElementById('ec-icon-input')?.files[0]
     const bannerFile = document.getElementById('ec-banner-input')?.files[0]
+    const bgFile = document.getElementById('ec-bg-input')?.files[0]
     if (!name) { if (msg) msg.innerHTML = `<div class="msg msg-error">Name is required!</div>`; return }
     if (msg) msg.innerHTML = `<div class="msg msg-success">Saving...</div>`
     let icon_url = existingIcon || null
     let banner_url = existingBanner || null
+    let background_url = existingBg || null
     if (iconFile) icon_url = await uploadImage('community-icons', iconFile)
     if (bannerFile) banner_url = await uploadImage('community-banners', bannerFile)
-    const { error } = await db.from('communities').update({ name, description, icon_url, banner_url }).eq('id', communityId)
+    if (bgFile) background_url = await uploadImage('backgrounds', bgFile)
+    const { error } = await db.from('communities').update({ name, description, icon_url, banner_url, background_url, music_url }).eq('id', communityId)
     if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not save!</div>` }
     else { openCommunity(communityId) }
   }
@@ -832,6 +891,18 @@
           </div>
           <div class="field"><label>Username</label><input type="text" id="edit-username" value="${currentProfile?.username ?? ''}" maxlength="20" /></div>
           <div class="field"><label>Bio</label><textarea id="edit-bio" rows="3" placeholder="Tell everyone about yourself...">${currentProfile?.bio ?? ''}</textarea></div>
+          <div class="field">
+            <label>Background image</label>
+            <div class="upload-area" onclick="document.getElementById('bg-input').click()">
+              <div id="bg-preview">${currentProfile?.background_url ? `<img src="${currentProfile.background_url}" />` : '<div class="upload-label">Click to upload background image</div>'}</div>
+              <input type="file" id="bg-input" accept="image/*" style="display:none" onchange="previewImage('bg-input','bg-preview',false)" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Profile music (YouTube URL)</label>
+            <input type="text" id="edit-music" value="${currentProfile?.music_url ?? ''}" placeholder="https://www.youtube.com/watch?v=..." />
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;">Visitors will hear this when they visit your profile</div>
+          </div>
           <div style="display:flex;gap:8px;margin-top:4px;">
             <button class="btn btn-accent btn-full" onclick="saveProfile()">Save</button>
             <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="showOwnProfile()">Cancel</button>
@@ -852,10 +923,10 @@
   }
 
   async function uploadImage(bucket, file) {
-    const ext = file.name.split('.').pop()
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '')
     const path = `${currentUser.id}/${Date.now()}.${ext}`
-    const { error } = await db.storage.from(bucket).upload(path, file, { upsert: true })
-    if (error) return null
+    const { error } = await db.storage.from(bucket).upload(path, file, { upsert: true, contentType: file.type })
+    if (error) { console.error('Upload error:', error); return null }
     const { data } = db.storage.from(bucket).getPublicUrl(path)
     return data.publicUrl
   }
@@ -864,15 +935,19 @@
     const msg = document.getElementById('edit-msg')
     const username = document.getElementById('edit-username')?.value.trim()
     const bio = document.getElementById('edit-bio')?.value.trim()
+    const music_url = document.getElementById('edit-music')?.value.trim() || null
     const avatarFile = document.getElementById('avatar-input')?.files[0]
     const bannerFile = document.getElementById('banner-input')?.files[0]
+    const bgFile = document.getElementById('bg-input')?.files[0]
     if (!username || username.length < 3) { if (msg) msg.innerHTML = `<div class="msg msg-error">Username must be at least 3 characters</div>`; return }
     if (msg) msg.innerHTML = `<div class="msg msg-success">Saving...</div>`
     let avatar_url = currentProfile?.avatar_url ?? null
     let banner_url = currentProfile?.banner_url ?? null
+    let background_url = currentProfile?.background_url ?? null
     if (avatarFile) { const url = await uploadImage('avatars', avatarFile); if (url) avatar_url = url }
     if (bannerFile) { const url = await uploadImage('banners', bannerFile); if (url) banner_url = url }
-    const { error } = await db.from('profiles').upsert({ id: currentUser.id, username, bio, avatar_url, banner_url })
+    if (bgFile) { const url = await uploadImage('backgrounds', bgFile); if (url) background_url = url }
+    const { error } = await db.from('profiles').upsert({ id: currentUser.id, username, bio, avatar_url, banner_url, background_url, music_url })
     if (error) { if (msg) msg.innerHTML = `<div class="msg msg-error">Could not save. Username may be taken!</div>` }
     else { await loadCurrentProfile(); updateNav(); renderProfile(currentUser.id) }
   }
@@ -925,13 +1000,73 @@
     if (result.error) { if (msg) msg.innerHTML = `<div class="msg msg-error">${result.error.message}</div>` }
     else {
       if (authMode === 'signup') { if (msg) msg.innerHTML = `<div class="msg msg-success">Check your email to confirm your account!</div>` }
-      else { currentUser = result.data.user; await loadCurrentProfile(); await loadFollows(); updateNav(); renderHome() }
+      else { currentUser = result.data.user; try { await loadCurrentProfile(); await loadFollows(); } catch(e) { console.error("Login profile error:", e) } updateNav(); renderHome() }
     }
   }
 
   function escapeHtml(str) {
     if (!str) return ''
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
+  // BACKGROUND
+  function setPageBackground(url) {
+    const el = document.getElementById('page-bg')
+    if (!el) return
+    if (url) {
+      el.style.backgroundImage = `url('${url}')`
+      el.style.display = 'block'
+    } else {
+      el.style.display = 'none'
+      el.style.backgroundImage = ''
+    }
+  }
+
+  // MUSIC
+  let musicPlaying = false
+  let currentMusicTitle = ''
+
+  function extractYouTubeId(url) {
+    if (!url) return null
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/)
+    return match ? match[1] : null
+  }
+
+  function playMusic(youtubeUrl, title) {
+    const videoId = extractYouTubeId(youtubeUrl)
+    if (!videoId) return
+    const iframe = document.getElementById('yt-player')
+    const player = document.getElementById('music-player')
+    const titleEl = document.getElementById('music-title')
+    if (!iframe || !player) return
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`
+    player.style.display = 'flex'
+    titleEl.textContent = title || 'Now playing'
+    currentMusicTitle = title || 'Now playing'
+    musicPlaying = true
+    document.getElementById('music-toggle').textContent = '⏸️'
+  }
+
+  function toggleMusic() {
+    const iframe = document.getElementById('yt-player')
+    if (!iframe) return
+    if (musicPlaying) {
+      iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0')
+      document.getElementById('music-toggle').textContent = '▶️'
+      musicPlaying = false
+    } else {
+      iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1')
+      document.getElementById('music-toggle').textContent = '⏸️'
+      musicPlaying = true
+    }
+  }
+
+  function stopMusic() {
+    const iframe = document.getElementById('yt-player')
+    const player = document.getElementById('music-player')
+    if (iframe) iframe.src = ''
+    if (player) player.style.display = 'none'
+    musicPlaying = false
   }
 
   db.auth.onAuthStateChange((event, session) => { currentUser = session?.user ?? null; updateNav() })
