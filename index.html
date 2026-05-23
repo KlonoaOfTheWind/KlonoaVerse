@@ -982,6 +982,7 @@
   }
 
   function renderAuth() {
+    setPageBackground('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F637888.jpg&f=1&nofb=1&ipt=9c0302e2a95512cdc6830bf39150bf0aba1ffb198a3c7f5972462ae3f3f9a09f')
     document.getElementById('app').innerHTML = `
       <div class="auth-wrap"><div class="auth-card">
         <div class="auth-title">🌀 KlonoaVerse</div>
@@ -991,7 +992,7 @@
         <div class="field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" /></div>
         <button class="btn btn-accent btn-full" onclick="handleAuth()">${authMode === 'signin' ? 'Sign in' : 'Sign up'}</button>
         <div class="auth-switch">${authMode === 'signin' ? "Don't have an account? <a onclick='toggleAuthMode()'>Sign up</a>" : "Already have an account? <a onclick='toggleAuthMode()'>Sign in</a>"}</div>
-        <div class="auth-switch" style="margin-top:8px;"><a onclick="renderHome()" style="color:var(--text2);">Back to KlonoaVerse</a></div>
+        <div class="auth-switch" style="margin-top:8px;"><a onclick="setPageBackground(null);renderHome()" style="color:var(--text2);">Back to KlonoaVerse</a></div>
       </div></div>`
   }
 
