@@ -107,6 +107,7 @@
     .badge-admin { background: #fff3cd; color: #856404; }
     .badge-banned { background: var(--red-light); color: var(--red); }
     .badge-warned { background: var(--amber-light); color: var(--amber); }
+    .badge-official { background: #dceeff; color: #185FA5; }
 
     /* PROFILE PAGE */
     .profile-page { max-width: 680px; margin: 0 auto; padding: 0 1rem 2rem; }
@@ -361,7 +362,7 @@
                   <div class="community-card-body">
                     <div class="community-card-icon">${c.icon_url ? `<img src="${c.icon_url}" />` : '🌀'}</div>
                     <div style="flex:1;min-width:0;">
-                      <div class="community-card-name">${escapeHtml(c.name)}</div>
+                      <div class="community-card-name">${escapeHtml(c.name)} ${c.official ? '<span class="badge badge-official">✅ Official</span>' : ''}</div>
                       <div class="community-card-desc">${escapeHtml(c.description ?? '')}</div>
                     </div>
                   </div>
@@ -432,6 +433,7 @@
           ${isAdmin() ? `
           <div class="admin-bar">
             <span class="admin-bar-title">👑 Community admin</span>
+            <button class="btn ${c.official ? 'btn-green' : 'btn-follow'}" onclick="toggleOfficial('${c.id}', ${c.official})">${c.official ? '✅ Remove Official' : '✅ Mark Official'}</button>
             ${c.banned
               ? `<button class="btn btn-green" onclick="unbanCommunity('${c.id}')">✅ Unban</button>`
               : `<button class="btn btn-amber" onclick="warnCommunity('${c.id}', '${escapeHtml(c.name)}', ${c.warning_count ?? 0})">⚠️ Warn</button>
@@ -445,6 +447,7 @@
                 <div>
                   <div style="display:flex;align-items:center;gap:8px;">
                     <span style="font-family:'Fredoka One',cursive;font-size:18px;color:#fff;">${escapeHtml(c.name)}</span>
+                    ${c.official ? '<span class="badge badge-official">✅ Official</span>' : ''}
                     ${c.warning_count > 0 ? `<span class="badge badge-warned">⚠️ ${c.warning_count}</span>` : ''}
                   </div>
                   <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;">${escapeHtml(c.description ?? '')}</div>
@@ -797,6 +800,11 @@
       </div>`)
   }
   async function doUnbanCommunity(communityId) { closeModal(); await db.from('communities').update({ banned: false }).eq('id', communityId); openCommunity(communityId) }
+
+  async function toggleOfficial(communityId, currentlyOfficial) {
+    await db.from('communities').update({ official: !currentlyOfficial }).eq('id', communityId)
+    openCommunity(communityId)
+  }
 
   // ADMIN USER ACTIONS
   async function warnUser(userId, username, currentWarnings) {
