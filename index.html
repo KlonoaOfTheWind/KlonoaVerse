@@ -309,14 +309,18 @@
   async function renderHome() {
     if (currentUser && !currentProfile?.username) { renderUsernameSetup(); return }
     if (maintenanceMode && !isAdmin()) {
-      document.getElementById('app').innerHTML = `<div class="maintenance"><div class="maintenance-icon">🔧</div><h1>KlonoaVerse is under maintenance</h1><p>We'll be back soon!</p></div>`
+      document.getElementById('app').innerHTML = `<div class="maintenance"><div class="maintenance-icon">🔧</div><h1>KlonoaVerse is under maintenance</h1><p>wait for da thing to come online let the devs cook</p></div>`
       return
     }
     const { data: allCommunities } = await db.from('communities').select('*').eq('banned', false).order('created_at', { ascending: false })
     const communities = allCommunities ?? []
     allCommunities?.forEach(c => { communityCache[c.id] = c })
-
     const followedComms = communities.filter(c => followedCommunities.includes(c.id))
+
+    // Load site settings for music
+    const { data: settings } = await db.from('site_settings').select('*').eq('id', 1).single()
+    if (settings?.feed_music_url) playMusic(settings.feed_music_url, settings.feed_music_title || 'KlonoaVerse')
+    else stopMusic()
 
     document.getElementById('app').innerHTML = `
       <div class="layout">
@@ -325,6 +329,7 @@
           <div class="admin-bar">
             <span class="admin-bar-title">👑 Admin</span>
             <button class="btn btn-amber" style="font-size:11px;padding:3px 8px;" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Site ON' : '🔴 Site OFF'}</button>
+            <button class="btn btn-follow" style="font-size:11px;padding:3px 8px;" onclick="showFeedMusicModal('${escapeHtml(settings?.feed_music_url ?? '')}', '${escapeHtml(settings?.feed_music_title ?? '')}')">🎵 Feed music</button>
           </div>` : ''}
           ${currentUser ? `
           <div class="card" style="padding:0.75rem;">
@@ -575,6 +580,33 @@
 
   function switchFeedTab(tab) { feedTab = tab; renderHome() }
   function toggleMaintenance() { maintenanceMode = !maintenanceMode; localStorage.setItem('kv_maintenance', maintenanceMode); renderHome() }
+
+  function showFeedMusicModal(currentUrl, currentTitle) {
+    showModal(`
+      <h3>🎵 Feed page music</h3>
+      <div class="field" style="margin-top:1rem;">
+        <label>YouTube URL</label>
+        <input type="text" id="feed-music-url" value="${currentUrl}" placeholder="https://www.youtube.com/watch?v=..." />
+      </div>
+      <div class="field">
+        <label>Music title <span style="font-weight:400;color:var(--text2);">(shown in player)</span></label>
+        <input type="text" id="feed-music-title" value="${currentTitle}" placeholder="e.g. Gusty Garden Galaxy" />
+      </div>
+      <div style="font-size:11px;color:var(--text2);margin-bottom:12px;">Leave URL blank to remove music from the feed page.</div>
+      <div class="modal-actions">
+        <button class="btn btn-accent btn-full" onclick="saveFeedMusic()">Save</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function saveFeedMusic() {
+    const url = document.getElementById('feed-music-url')?.value.trim() || null
+    const title = document.getElementById('feed-music-title')?.value.trim() || null
+    await db.from('site_settings').update({ feed_music_url: url, feed_music_title: title }).eq('id', 1)
+    closeModal()
+    renderHome()
+  }
 
   async function renderProfile(userId) {
     document.getElementById('app').innerHTML = `<div class="loading" style="margin-top:3rem;">Loading profile...</div>`
