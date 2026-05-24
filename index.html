@@ -309,7 +309,7 @@
   async function renderHome() {
     if (currentUser && !currentProfile?.username) { renderUsernameSetup(); return }
     if (maintenanceMode && !isAdmin()) {
-      document.getElementById('app').innerHTML = `<div class="maintenance"><div class="maintenance-icon">🔧</div><h1>KlonoaVerse is under maintenance</h1><p>wait for da thing to come online let the devs cook</p></div>`
+      document.getElementById('app').innerHTML = `<div class="maintenance"><div class="maintenance-icon">🔧</div><h1>KlonoaVerse is under maintenance</h1><p>We'll be back soon!</p></div>`
       return
     }
     const { data: allCommunities } = await db.from('communities').select('*').eq('banned', false).order('created_at', { ascending: false })
@@ -321,6 +321,7 @@
     const { data: settings } = await db.from('site_settings').select('*').eq('id', 1).single()
     if (settings?.feed_music_url) playMusic(settings.feed_music_url, settings.feed_music_title || 'KlonoaVerse')
     else stopMusic()
+    setPageBackground(settings?.feed_background_url ?? null)
 
     document.getElementById('app').innerHTML = `
       <div class="layout">
@@ -330,6 +331,7 @@
             <span class="admin-bar-title">👑 Admin</span>
             <button class="btn btn-amber" style="font-size:11px;padding:3px 8px;" onclick="toggleMaintenance()">${maintenanceMode ? '✅ Site ON' : '🔴 Site OFF'}</button>
             <button class="btn btn-follow" style="font-size:11px;padding:3px 8px;" onclick="showFeedMusicModal('${escapeHtml(settings?.feed_music_url ?? '')}', '${escapeHtml(settings?.feed_music_title ?? '')}')">🎵 Feed music</button>
+            <button class="btn btn-follow" style="font-size:11px;padding:3px 8px;" onclick="showFeedBgModal('${escapeHtml(settings?.feed_background_url ?? '')}')">🖼️ Feed background</button>
           </div>` : ''}
           ${currentUser ? `
           <div class="card" style="padding:0.75rem;">
@@ -604,6 +606,41 @@
     const url = document.getElementById('feed-music-url')?.value.trim() || null
     const title = document.getElementById('feed-music-title')?.value.trim() || null
     await db.from('site_settings').update({ feed_music_url: url, feed_music_title: title }).eq('id', 1)
+    closeModal()
+    renderHome()
+  }
+
+  function showFeedBgModal(currentUrl) {
+    showModal(`
+      <h3>🖼️ Feed background</h3>
+      <div class="field" style="margin-top:1rem;">
+        <label>Upload background image</label>
+        <div class="upload-area" onclick="document.getElementById('feed-bg-input').click()">
+          <div id="feed-bg-preview">${currentUrl ? `<img src="${currentUrl}" />` : '<div class="upload-label">Click to upload background image</div>'}</div>
+          <input type="file" id="feed-bg-input" accept="image/*" style="display:none" onchange="previewImage('feed-bg-input','feed-bg-preview',false)" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Or paste an image URL</label>
+        <input type="text" id="feed-bg-url" value="${currentUrl}" placeholder="https://..." />
+      </div>
+      <div style="font-size:11px;color:var(--text2);margin-bottom:12px;">Leave blank to remove the background.</div>
+      <div class="modal-actions">
+        <button class="btn btn-accent btn-full" onclick="saveFeedBackground()">Save</button>
+        <button class="btn btn-full" style="background:var(--surface2);color:var(--text2);" onclick="closeModal()">Cancel</button>
+      </div>
+    `)
+  }
+
+  async function saveFeedBackground() {
+    const urlInput = document.getElementById('feed-bg-url')?.value.trim() || null
+    const file = document.getElementById('feed-bg-input')?.files[0]
+    let feed_background_url = urlInput
+    if (file) {
+      const uploaded = await uploadImage('backgrounds', file)
+      if (uploaded) feed_background_url = uploaded
+    }
+    await db.from('site_settings').update({ feed_background_url: feed_background_url || null }).eq('id', 1)
     closeModal()
     renderHome()
   }
